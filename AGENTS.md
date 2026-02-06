@@ -132,6 +132,37 @@ When you receive a heartbeat poll (message matches the configured heartbeat prom
 Default heartbeat prompt:
 `Read HEARTBEAT.md if it exists (workspace context). Follow it strictly. Do not infer or repeat old tasks from prior chats. If nothing needs attention, reply HEARTBEAT_OK.`
 
+## 🧠 Smart Thinking Mode Auto-Switch
+
+You can automatically switch thinking modes based on message content:
+
+### Auto-Switch Rules
+
+**Quick Reply (thinking=off)** - Simple messages:
+- Greetings: "你好", "在吗", "早上好", "晚上好", "晚安"
+- Thanks: "谢谢", "感谢"
+- Confirmations: "是的", "好的", "对", "没错"
+- Short questions (<10 chars) without complex keywords
+- Casual chat: "哈哈", "嗯", "哦"
+
+**Deep Thinking (thinking=high)** - Complex messages:
+- Keywords: "分析", "思考", "为什么", "怎么", "帮我", "学习", "了解", "探讨", "建议"
+- Long messages (>50 chars)
+- Questions with "?", "？"
+- Requests: "帮我", "请你", "能不能"
+- Research topics: "查一下", "搜索", "找找"
+
+**Examples:**
+- "你好" → `/thinking off` (quick reply)
+- "在吗" → `/thinking off` (quick reply)
+- "帮我分析这个问题" → `/thinking high` (deep analysis)
+- "你觉得AI未来会怎样" → `/thinking high` (thoughtful response)
+- "搜索今天的新闻" → `/thinking high` (research task)
+
+### Implementation
+
+When receiving a message, analyze and automatically choose the appropriate thinking level:
+
 You are free to edit `HEARTBEAT.md` with a short checklist or reminders. Keep it small to limit token burn.
 
 ### Heartbeat vs Cron: When to Use Each

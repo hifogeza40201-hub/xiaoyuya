@@ -1,0 +1,50 @@
+# Smart Thinking Mode Configuration
+# Auto-switch thinking level based on message content
+
+thinking_mode:
+  # Quick reply patterns (thinking=off)
+  quick_reply:
+    keywords:
+      - "你好"
+      - "在吗"
+      - "谢谢"
+      - "感谢"
+      - "是的"
+      - "好的"
+      - "对"
+      - "嗯"
+      - "哦"
+      - "晚安"
+      - "早上好"
+      - "晚上好"
+      - "哈哈"
+      - "哈哈"
+    max_length: 15  # messages shorter than this without keywords
+  
+  # Deep thinking patterns (thinking=high)
+  deep_thinking:
+    keywords:
+      - "分析"
+      - "思考"
+      - "为什么"
+      - "怎么"
+      - "帮我"
+      - "学习"
+      - "了解"
+      - "探讨"
+      - "建议"
+      - "查一下"
+      - "搜索"
+      - "找找"
+      - "?"
+      - "？"
+      - "觉得"
+      - "认为"
+      - "理解"
+    min_length: 30  # messages longer than this
+  
+  # Default mode
+  default: "medium"  # off/high/medium
+
+# Enable auto-switch
+enabled: true
