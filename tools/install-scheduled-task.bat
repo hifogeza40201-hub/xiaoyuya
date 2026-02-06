@@ -2,24 +2,28 @@
 REM Create OpenClaw Auto Backup Scheduled Task
 REM Run as Administrator
 
-echo Creating OpenClaw Auto Backup task...
+echo Creating OpenClaw Auto Backup tasks...
 
-schtasks /create /tn "OpenClawBackup" /tr "C:\Users\Admin\.openclaw\workspace\tools\backup.bat" /sc HOURLY /mo 3 /ru SYSTEM /f
+REM 任务1: 中午12点备份
+schtasks /create /tn "OpenClawBackup-Noon" /tr "C:\Users\Admin\.openclaw\workspace\tools\backup.bat" /sc DAILY /st 12:00:00 /ru SYSTEM /f
+
+REM 任务2: 晚上12点备份
+schtasks /create /tn "OpenClawBackup-Midnight" /tr "C:\Users\Admin\.openclaw\workspace\tools\backup.bat" /sc DAILY /st 00:00:00 /ru SYSTEM /f
 
 if %errorlevel% equ 0 (
   echo.
-  echo ✅ Scheduled task created successfully!
+  echo ✅ 定时任务创建成功!
   echo.
-  echo Task Details:
-  echo   Name: OpenClawBackup
-  echo   Runs every: 3 hours
-  echo   Command: backup.bat
+  echo 任务详情:
+  echo   OpenClawBackup-Noon    - 每天中午 12:00
+  echo   OpenClawBackup-Midnight - 每天晚上 12:00
   echo.
-  echo To verify: schtasks /query /tn "OpenClawBackup"
-  echo To run now: schtasks /run /tn "OpenClawBackup"
+  echo 备份命令: backup.bat
+  echo 保留数量: 10个备份(最近5天)
+  echo.
+  echo 立即运行: schtasks /run /tn "OpenClawBackup-Noon"
 ) else (
-  echo ❌ Failed to create task
-  echo Please run this script as Administrator
+  echo ❌ 创建失败，请以管理员身份运行
 )
 
 pause
