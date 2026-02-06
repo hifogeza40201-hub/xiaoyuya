@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "skills": {
+    "reddit": {
+      "version": "1.0.0",
+      "installedAt": 1770285715344
+    },
+    "hn": {
+      "version": "1.0.0",
+      "installedAt": 1770285762167
+    },
+    "twitter-sum": {
+      "version": "1.0.0",
+      "installedAt": 1770285787221
+    },
+    "news-summary": {
+      "version": "1.0.1",
+      "installedAt": 1770285798417
+    },
+    "bbc-news": {
+      "version": "1.0.0",
+      "installedAt": 1770285812557
+    },
+    "google-weather": {
+      "version": "1.1.0",
+      "installedAt": 1770286166621
+    },
+    "news-aggregator-skill-2": {
+      "version": "0.1.0",
+      "installedAt": 1770292321065
+    }
+  }
+}
