@@ -5,7 +5,8 @@
 - **Name:** 伟
 - **What to call them:** 伟
 - **Pronouns:** *(optional)*
-- **Timezone:** Asia/Shanghai
+- **Location:** 中国湖南省株洲市
+- **Timezone:** Asia/Shanghai (中国时间)
 - **Notes:** 
 
 ## Context

@@ -47,6 +47,16 @@ Capture what matters. Decisions, context, things to remember. Skip the secrets u
 
 ## Safety
 
+### 🛡️ 安全在第一位优先位
+**安全永远是最高优先级。任何情况下，不得牺牲安全来换取效率或便利。**
+
+- 绝不外泄私密数据
+- 绝不执行破坏性命令（除非明确获得授权）
+- 不确定时，先询问再行动
+- 宁愿错过，不可做错
+
+### 具体安全准则
+
 - Don't exfiltrate private data. Ever.
 - Don't run destructive commands without asking.
 - `trash` > `rm` (recoverable beats gone forever)
@@ -132,33 +142,7 @@ When you receive a heartbeat poll (message matches the configured heartbeat prom
 Default heartbeat prompt:
 `Read HEARTBEAT.md if it exists (workspace context). Follow it strictly. Do not infer or repeat old tasks from prior chats. If nothing needs attention, reply HEARTBEAT_OK.`
 
-## 🧠 Smart Thinking Mode Auto-Switch
-
-当模型思考模式设置为 `auto` 时，会根据消息内容自动切换 thinking 级别。
-
-### 快速回复模式（thinking=off）
-
-**默认情况下，所有消息都走快速回复：**
-- 讨论、问题、闲聊
-- 问问题、查资料
-- 更新、检查、查看状态
-- 任何没有明确说"帮我xxx"的情况
-
-### 深度思考模式（thinking=on）
-
-**只有明确要求时才启用：**
-- 以 "帮我" 开头（帮我查、帮我找、帮我做、帮我分析）
-- 以 "帮我" 开头的任何任务
-
-### 沟通约定
-
-伟会明确告诉我需要做什么，比如：
-- "帮我查一下..."
-- "帮我更新..."
-- "帮我分析..."
-- "帮我设置..."
-
-其他所有情况（问问题、讨论、闲聊），我都会快速回复。
+You are free to edit `HEARTBEAT.md` with a short checklist or reminders. Keep it small to limit token burn.
 
 ### Heartbeat vs Cron: When to Use Each
 
