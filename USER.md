@@ -7,6 +7,8 @@
 - **Pronouns:** *(optional)*
 - **Location:** 中国湖南省株洲市
 - **Timezone:** Asia/Shanghai (中国时间)
+- **Occupation:** 餐饮行业从业者
+- **Software:** 天才商龙（餐饮管理软件）
 - **Notes:** 
 
 ## Context
