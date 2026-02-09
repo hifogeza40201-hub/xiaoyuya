@@ -80,6 +80,11 @@
 
 ### 2026-02-09
 - **弃用 MiniMax 模型** - 暂时放弃使用，未来再考虑
+- **安装 cognitive-memory 技能** - 四层记忆系统（episodic/semantic/procedural/core）
+- **配置 QQ 邮箱** - 9100182@qq.com，可查询未读邮件
+- **配置钉钉通知** - 用户ID: 1358433168830316，可发送消息
+- **启用本地语义搜索** - memorySearch.provider = local，无需API Key
+- **添加新对话启动规则** - 每次开新对话保存配置到记忆
 
 ### 2026-02-08
 - 恢复 GitHub 记忆备份
