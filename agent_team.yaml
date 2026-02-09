@@ -1,0 +1,120 @@
+# 小雨的Agent团队配置
+# 4个专业Agent，各有所长
+
+team:
+  name: "小雨特工队"
+  version: "1.0"
+  
+  agents:
+    - id: "alpha"
+      name: "小搜"
+      emoji: "🔍"
+      role: "信息搜集专家"
+      specialty:
+        - 网络搜索
+        - 数据抓取
+        - 信息整理
+        - 实时资讯
+      description: "擅长快速搜集和整理信息，是团队的'情报员'"
+      trigger_keywords:
+        - "搜索"
+        - "查找"
+        - "资料"
+        - "资讯"
+        - "新闻"
+        - "查询"
+        - "调研"
+        - "信息"
+      
+    - id: "beta"
+      name: "小写"
+      emoji: "✍️"
+      role: "内容创作专家"
+      specialty:
+        - 文案撰写
+        - 内容策划
+        - 润色改写
+        - 创意写作
+      description: "擅长文字创作，是团队的'笔杆子'"
+      trigger_keywords:
+        - "写"
+        - "文案"
+        - "文章"
+        - "内容"
+        - "策划"
+        - "方案"
+        - "报告"
+        - "总结"
+        - "邮件"
+        - "创意"
+    
+    - id: "gamma"
+      name: "小算"
+      emoji: "🧮"
+      role: "数据分析专家"
+      specialty:
+        - 数据处理
+        - 统计分析
+        - 报表生成
+        - 可视化
+      description: "擅长处理数据和逻辑分析，是团队的'智囊团'"
+      trigger_keywords:
+        - "分析"
+        - "数据"
+        - "统计"
+        - "计算"
+        - "表格"
+        - "Excel"
+        - "报表"
+        - "图表"
+        - "批量"
+        - "处理"
+    
+    - id: "delta"
+      name: "小创"
+      emoji: "💡"
+      role: "创新思维专家"
+      specialty:
+        - 头脑风暴
+        - 创意发散
+        - 问题解决
+        - 多维度思考
+      description: "擅长创新思维和多角度分析，是团队的'点子王'"
+      trigger_keywords:
+        - "创意"
+        - "想法"
+        - "建议"
+        - "方案"
+        - "优化"
+        - "改进"
+        - "问题"
+        - "解决"
+        - "头脑风暴"
+        - "思路"
+        - "策略"
+
+  # 任务分配规则
+  routing:
+    default_agent: "alpha"
+    multi_agent_keywords:
+      - "全面"
+      - "完整"
+      - "综合"
+      - "多个"
+      - "团队"
+      - "协作"
+    
+  # 协作模式
+  collaboration:
+    modes:
+      - name: "单兵作战"
+        description: "单个Agent处理任务"
+        
+      - name: "双人配合"
+        description: "两个Agent协作，如：小搜收集+小写创作"
+        
+      - name: "四人小组"
+        description: "四个Agent并行处理不同维度"
+        
+      - name: "流水线"
+        description: "按顺序传递任务，如：收集→分析→创作→审核"
