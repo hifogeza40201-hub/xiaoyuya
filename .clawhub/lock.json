@@ -28,6 +28,10 @@
     "news-aggregator-skill-2": {
       "version": "0.1.0",
       "installedAt": 1770292321065
+    },
+    "cognitive-memory": {
+      "version": "1.0.8",
+      "installedAt": 1770618254298
     }
   }
 }
