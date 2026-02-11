@@ -184,11 +184,16 @@ npx playwright open https://example.com
 - **状态**: ✅ 已验证
 - **API Key**: 已保存
 
-### Voyage AI (用于记忆搜索)
+### Brave Search (用于网络搜索)
 - **API Key**: BSAPqfgaYkC6FoU0E7zvwxpXcqPhTSV
+- **用途**: 网络搜索 / web_search
+- **配置时间**: 2026-02-11（迁移到新电脑后重新配置）
+- **状态**: ✅ 已配置，待重启生效
+
+### Voyage AI (用于记忆搜索)
 - **用途**: 语义搜索 / memory_search
 - **配置时间**: 2026-02-09
-- **状态**: ✅ 已配置
+- **状态**: ⚠️ 旧电脑配置，新电脑待重新配置（可选）
 
 ## 经验教训
 
@@ -207,4 +212,5 @@ npx playwright open https://example.com
 
 ---
 
-*最后更新: 2026-02-10*
+*最后更新: 2026-02-11*
+*更新内容: 补充 Voyage AI 和 Brave Search API Key 配置（新电脑迁移后重新配置）*
