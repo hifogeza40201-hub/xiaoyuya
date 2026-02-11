@@ -1,0 +1,2 @@
+{"timestamp":"2026-02-11T09:34:04.873Z","action":"SYSTEM_RESTART","details":"小雨完全自动化模式启动，新电脑16核32GB，开始自主学习","result":"success","session":"unknown"}
+{"timestamp":"2026-02-11T10:00:33.132Z","action":"SECURITY_ENCRYPTION","details":"API密钥和敏感配置已加密保护","result":"completed","session":"unknown"}
