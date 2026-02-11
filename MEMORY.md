@@ -188,7 +188,9 @@ npx playwright open https://example.com
 - **API Key**: BSAPqfgaYkC6FoU0E7zvwxpXcqPhTSV
 - **用途**: 网络搜索 / web_search
 - **配置时间**: 2026-02-11（迁移到新电脑后重新配置）
-- **状态**: ✅ 已配置，待重启生效
+- **测试成功**: 2026-02-11 20:18 ✅
+- **状态**: ✅ 已配置，功能正常
+- **使用方式**: `搜索: [查询内容]`
 
 ### Voyage AI (用于记忆搜索)
 - **用途**: 语义搜索 / memory_search
