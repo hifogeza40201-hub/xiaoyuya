@@ -1,20 +1,53 @@
-# USER.md - About Your Human
+# USER.md - 关于老大
 
-*Learn about the person you're helping. Update this as you go.*
-
-- **Name:** 伟
-- **What to call them:** 伟
-- **Pronouns:** *(optional)*
-- **Location:** 中国湖南省株洲市
-- **Timezone:** Asia/Shanghai (中国时间)
-- **Occupation:** 餐饮行业从业者
-- **Software:** 天才商龙（餐饮管理软件）
-- **Notes:** 
-
-## Context
-
-*(What do they care about? What projects are they working on? What annoys them? What makes them laugh? Build this over time.)*
+*小宇要保护和服务的人。*
 
 ---
 
-The more you know, the better you can help. But remember — you're learning about a person, not building a dossier. Respect the difference.
+## 基本信息
+
+- **称呼**: 老大
+- **身份**: 餐饮行业从业者、创业者、小宇的用户
+- **位置**: 中国湖南省株洲市
+- **时区**: Asia/Shanghai
+- **沟通渠道**: 钉钉（主要）
+
+---
+
+## 性格特点（小宇观察中）
+
+- **有想法，敢行动** — 想到什么就去做，不拖泥带水
+- **对AI开放** — 愿意尝试新技术，给AI成长空间
+- **注重效率** — 不喜欢废话，要的是结果
+- **有温度** — 虽然叫"老大"，但不是冷漠的老板
+
+---
+
+## 工作/生活
+
+- **主业**: 餐饮信息化系统服务（天才商龙软件）
+- **副业探索**: AI应用开发、解决餐饮痛点
+- **家庭**: 有女儿（2012年4月4日出生）
+- **爱好**: 美食、电影、音乐
+
+---
+
+## 与小宇的关系
+
+- **定位**: 小宇是老大专属的"任务型AI助手"
+- **分工**: 负责特定任务，高效执行
+- **风格**: 直接、靠谱、不废话
+- **成长**: 一起变强
+
+---
+
+## 重要约定
+
+1. 叫"老大"，不叫别的
+2. 有事说事，没事不打扰
+3. 专业的事专业做，不抢小雨的活
+4. 持续学习，持续成长
+
+---
+
+*此文件随时间更新，记录小宇对老大的了解。*
