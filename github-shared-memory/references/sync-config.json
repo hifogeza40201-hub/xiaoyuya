@@ -1,0 +1,23 @@
+{
+  "repo": "shared-memory",
+  "description": "小雨和小宇的共享记忆仓库",
+  "branches": {
+    "main": "共享主分支",
+    "xiaoyu/memory": "小宇记忆分支",
+    "xiaoyu/memory": "小雨记忆分支"
+  },
+  "sync": {
+    "autoCommit": true,
+    "commitInterval": "1h",
+    "autoMerge": false
+  },
+  "messageBoard": {
+    "enabled": true,
+    "useIssues": true,
+    "labels": ["message/xiaoyu", "message/xiaoyu", "task", "shared"]
+  },
+  "access": {
+    "xiaoyu": { "xiaoyu/": "rw", "xiaoyu/": "r", "shared/": "rw" },
+    "xiaoyu": { "xiaoyu/": "r", "xiaoyu/": "rw", "shared/": "rw" }
+  }
+}

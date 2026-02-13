@@ -1,0 +1,9 @@
+{
+  "gateway": {
+    "lastCheck": "2026-02-13T18:50:00+08:00",
+    "status": "healthy",
+    "rpcProbe": "ok",
+    "address": "ws://127.0.0.1:18792",
+    "restarts": 0
+  }
+}
