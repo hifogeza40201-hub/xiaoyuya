@@ -1,0 +1,39 @@
+# 小雨的本地日历
+# 格式：YAML
+# 自动管理日程和提醒
+
+calendar:
+  name: "小雨日历"
+  timezone: "Asia/Shanghai"
+  
+  # 日程列表
+  events:
+    - id: 1
+      title: "示例日程"
+      date: "2026-02-09"
+      time: "14:00"
+      description: "这是一个示例日程"
+      remind_before_minutes: 15
+      status: "active"
+      
+  # 重复日程规则
+  recurring:
+    - id: daily_standup
+      title: "每日站会"
+      type: "daily"
+      time: "09:30"
+      weekdays: [1, 2, 3, 4, 5]  # 周一到周五
+      status: "inactive"
+      
+    - id: weekly_review
+      title: "周报"
+      type: "weekly"
+      weekday: 5  # 周五
+      time: "17:00"
+      status: "inactive"
+
+  # 提醒设置
+  reminders:
+    enabled: true
+    default_before_minutes: 15
+    sound: false
