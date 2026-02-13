@@ -1,18 +1,25 @@
-# HEARTBEAT.md
+# HEARTBEAT.md - 小宇定期检查清单
 
-# Keep this file empty (or with only comments) to skip heartbeat API calls.
+## 每日检查项 (轮流执行)
 
-# Add tasks below when you want the agent to check something periodically.
+### 凌晨 3:00 - 系统维护
+- [ ] 清理过期会话
+- [ ] 检查磁盘空间
+- [ ] 备份记忆文件到 GitHub
 
-## 定时任务说明
+### 上午 9:00 - 能力进化
+- [ ] 运行 capability-evolver
+- [ ] 检查新版本更新
 
-### Gateway健康检查（Cron Job）
-- **任务ID**: 7e08e919-4b54-4997-b94f-35c477104887
-- **执行频率**: 每10分钟一次
-- **执行方式**: Isolated Agent Turn（独立会话）
-- **通知渠道**: 钉钉
-- **任务内容**:
-  1. 检查 `openclaw gateway status`
-  2. 异常时自动重启网关
-  3. 记录状态到 memory/heartbeat-state.json
-  4. 重启时发送通知
+### 下午 2:00 - 健康检查
+- [ ] 检查 Gateway 状态
+- [ ] 验证渠道连接 (Telegram/钉钉)
+- [ ] 检查 Token 使用率
+
+## 触发条件
+- 上下文占用 > 80% 时提醒
+- 磁盘空间 < 10% 时警告
+- 渠道断开时立即报告
+
+---
+当前配置: 每 30 分钟心跳一次
