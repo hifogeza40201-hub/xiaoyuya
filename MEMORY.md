@@ -131,4 +131,32 @@
 **保存时间**: 2026-02-13 18:45
 
 ---
-_记忆更新: 2026-02-13 18:45_
+_记忆更新: 2026-02-13 21:01_
+
+## 备份策略（重要！）
+
+**老大要求：三重备份机制**
+
+| 位置 | 路径 | 用途 |
+|------|------|------|
+| ☁️ GitHub云端 | https://github.com/hifogeza40201-hub/xiaoyuya | 异地容灾，版本控制 |
+| 💻 本地工作区 | C:\Users\Admin\.openclaw\workspace | 日常操作 |
+| 💾 D盘备份 | D:\OpenClaw-Backup\Xiaoyu-Workspace | 本地冗余 |
+
+**备份内容：**
+- MEMORY.md 和所有记忆文件
+- openclaw.json 配置
+- IDENTITY.md、HEARTBEAT.md
+- 技能目录 (skills/)
+- 工具配置 (TOOLS.md)
+- 共享目录 (shared/)
+- 媒体文件 (media/)
+
+**执行时机：**
+- 每日凌晨 3:00 自动备份
+- 重大配置变更后手动备份
+- 重启 Gateway 前备份
+
+**今日备份记录：**
+- ✅ 2026-02-13 21:01 - GitHub备份完成
+- ✅ 2026-02-13 21:01 - D盘备份完成
