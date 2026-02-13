@@ -1,0 +1,34 @@
+# 忽略文件
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 临时文件
+*.tmp
+*.temp
+*.log
+
+# 敏感信息（Token等）
+.env
+.env.local
+secrets.json
+
+# 个人记忆备份（可选，如果需要版本控制则注释掉）
+# */daily/*.md
+# */memory/*.bak
+
+# 大型媒体文件
+*.mp4
+*.mp3
+*.wav
+*.ogg
+*.jpg
+*.png
+*.gif
