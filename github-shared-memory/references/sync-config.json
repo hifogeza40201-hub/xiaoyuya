@@ -19,5 +19,10 @@
   "access": {
     "xiaoyu": { "xiaoyu/": "rw", "xiaoyu/": "r", "shared/": "rw" },
     "xiaoyu": { "xiaoyu/": "r", "xiaoyu/": "rw", "shared/": "rw" }
+  },
+  "directories": {
+    "xiaoyu/": "小宇主工作区（弟弟）",
+    "xiaoyu/": "小雨主工作区（姐姐）",
+    "shared/": "姐弟协作共享区"
   }
 }
