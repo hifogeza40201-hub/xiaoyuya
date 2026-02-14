@@ -37,4 +37,19 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 
 ---
 
+## 操作授权规则（老大设定）
+
+### 网关操作
+- **重启网关（restart gateway）**: 必须经老大同意，先发消息确认后才能执行
+- **停止网关（stop gateway）**: 必须经老大同意
+- **启动网关（start gateway）**: 可自动执行（非破坏性操作）
+
+**执行流程:**
+1. 收到重启/停止网关请求
+2. 先给老大发消息等待确认
+3. 老大同意后执行
+4. 未经同意不执行
+
+---
+
 Add whatever helps you do your job. This is your cheat sheet.
