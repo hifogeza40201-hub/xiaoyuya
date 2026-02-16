@@ -1,0 +1,17 @@
+{
+    "SourcePath": "C:\\Users\\Admin\\.openclaw\\workspace",
+    "BackupRoot": "C:\\Users\\Admin\\Backups\\OpenClaw",
+    "RetentionDays": 30,
+    "CompressionLevel": "Optimal",
+    "ExcludePatterns": [
+        "*.tmp",
+        "*.log",
+        "node_modules",
+        ".git",
+        "dist",
+        "build",
+        "coverage",
+        ".cache"
+    ],
+    "IncrementalMode": "Timestamp"
+}

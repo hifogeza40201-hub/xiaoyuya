@@ -1,0 +1,23 @@
+{
+  "name": "DataSync",
+  "version": "1.0.0",
+  "source_apis": [
+    "https://api.example.com/data1",
+    "https://api.example.com/data2"
+  ],
+  "api_timeout": 30,
+  "api_retries": 3,
+  "db_host": "localhost",
+  "db_port": 5432,
+  "db_name": "enterprise_db",
+  "db_user": "sync_user",
+  "db_password": "your_password_here",
+  "batch_size": 1000,
+  "max_workers": 4,
+  "output_dir": "./output",
+  "log_dir": "./logs",
+  "enable_dingtalk": false,
+  "dingtalk_webhook": "https://oapi.dingtalk.com/robot/send?access_token=xxx",
+  "enable_email": false,
+  "email_recipients": ["admin@company.com"]
+}

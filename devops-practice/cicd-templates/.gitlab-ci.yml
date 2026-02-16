@@ -1,0 +1,342 @@
+image: python:3.11-slim
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  DOCKER_REGISTRY: "$CI_REGISTRY"
+  DOCKER_IMAGE: "$CI_REGISTRY_IMAGE"
+
+stages:
+  - lint
+  - test
+  - build
+  - security
+  - deploy
+
+# ============ 缓存配置 ============
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .cache/pip
+    - venv/
+
+# ============ 代码质量检查 ============
+flake8:
+  stage: lint
+  before_script:
+    - pip install flake8 flake8-docstrings
+  script:
+    - flake8 src/ tests/ --count --max-complexity=10 --max-line-length=127 --statistics --output-file=flake8-report.txt
+    - cat flake8-report.txt
+  artifacts:
+    paths:
+      - flake8-report.txt
+    expire_in: 1 week
+  allow_failure: true
+
+black:
+  stage: lint
+  before_script:
+    - pip install black
+  script:
+    - black --check --diff src/ tests/
+  allow_failure: true
+
+isort:
+  stage: lint
+  before_script:
+    - pip install isort
+  script:
+    - isort --check-only --diff src/ tests/
+  allow_failure: true
+
+mypy:
+  stage: lint
+  before_script:
+    - pip install mypy types-requests
+  script:
+    - mypy src/ --ignore-missing-imports --html-report mypy-report
+  artifacts:
+    paths:
+      - mypy-report/
+    expire_in: 1 week
+  allow_failure: true
+
+# ============ 测试阶段 ============
+unit_tests:
+  stage: test
+  coverage: '/TOTAL.*\s+(\d+%)$/'
+  before_script:
+    - python -m venv venv
+    - source venv/bin/activate
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+    - pip install -r requirements-dev.txt
+  script:
+    - pytest tests/unit -v --cov=src --cov-report=xml --cov-report=term --junitxml=junit.xml
+  artifacts:
+    when: always
+    paths:
+      - coverage.xml
+      - junit.xml
+      - htmlcov/
+    reports:
+      junit: junit.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    expire_in: 1 week
+  parallel:
+    matrix:
+      - PYTHON_VERSION: ['3.9', '3.10', '3.11', '3.12']
+
+integration_tests:
+  stage: test
+  services:
+    - name: postgres:15-alpine
+      alias: postgres
+    - name: redis:7-alpine
+      alias: redis
+    - name: localstack/localstack:latest
+      alias: localstack
+  variables:
+    POSTGRES_DB: test_db
+    POSTGRES_USER: test_user
+    POSTGRES_PASSWORD: test_pass
+    DATABASE_URL: postgresql://test_user:test_pass@postgres:5432/test_db
+    REDIS_URL: redis://redis:6379/0
+    AWS_ACCESS_KEY_ID: test
+    AWS_SECRET_ACCESS_KEY: test
+    AWS_DEFAULT_REGION: us-east-1
+    LOCALSTACK_HOST: localstack
+  before_script:
+    - pip install -r requirements.txt
+    - pip install -r requirements-dev.txt
+    # 等待服务准备就绪
+    - |
+      until pg_isready -h postgres -U test_user; do
+        echo "Waiting for postgres..."
+        sleep 2
+      done
+    - |
+      until redis-cli -h redis ping | grep PONG; do
+        echo "Waiting for redis..."
+        sleep 2
+      done
+  script:
+    - pytest tests/integration -v --tb=short --junitxml=junit-integration.xml
+  artifacts:
+    when: always
+    reports:
+      junit: junit-integration.xml
+    expire_in: 1 week
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+
+# ============ 构建阶段 ============
+build_docker:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker build --cache-from $DOCKER_IMAGE:latest -t $DOCKER_IMAGE:$CI_COMMIT_SHA -t $DOCKER_IMAGE:latest .
+    - docker push $DOCKER_IMAGE:$CI_COMMIT_SHA
+    - docker push $DOCKER_IMAGE:latest
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_TAG
+
+# ============ 安全扫描 ============
+bandit:
+  stage: security
+  before_script:
+    - pip install bandit
+  script:
+    - bandit -r src/ -f json -o bandit-report.json || true
+    - bandit -r src/ -f screen
+  artifacts:
+    paths:
+      - bandit-report.json
+    expire_in: 1 week
+    when: always
+  allow_failure: true
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+
+dependency_check:
+  stage: security
+  image:
+    name: owasp/dependency-check:latest
+    entrypoint: [""]
+  script:
+    - /usr/share/dependency-check/bin/dependency-check.sh
+      --project "$CI_PROJECT_NAME"
+      --scan .
+      --format JSON
+      --format HTML
+      --out reports/
+      --enableExperimental
+  artifacts:
+    paths:
+      - reports/
+    expire_in: 1 week
+  allow_failure: true
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: weekly
+
+container_scanning:
+  stage: security
+  image: aquasec/trivy:latest
+  script:
+    - trivy image --exit-code 0 --no-progress --format template --template "@contrib/sarif.tpl" -o trivy-report.sarif $DOCKER_IMAGE:$CI_COMMIT_SHA
+    - trivy image --exit-code 0 --no-progress --severity HIGH,CRITICAL $DOCKER_IMAGE:$CI_COMMIT_SHA
+  artifacts:
+    paths:
+      - trivy-report.sarif
+    expire_in: 1 week
+  allow_failure: true
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+# ============ 部署阶段 ============
+.deploy_template: &deploy_definition
+  image: bitnami/kubectl:latest
+  before_script:
+    - kubectl config use-context $KUBE_CONTEXT
+  script:
+    - |
+      helm upgrade --install $CI_PROJECT_NAME ./helm \
+        --namespace $NAMESPACE \
+        --set image.tag=$CI_COMMIT_SHA \
+        --set image.repository=$DOCKER_IMAGE \
+        --set environment=$ENVIRONMENT \
+        --values ./helm/values-$ENVIRONMENT.yaml \
+        --wait --timeout ${TIMEOUT:-5m} \
+        --atomic
+    - kubectl rollout status deployment/$CI_PROJECT_NAME -n $NAMESPACE
+
+deploy_dev:
+  <<: *deploy_definition
+  stage: deploy
+  variables:
+    KUBE_CONTEXT: dev
+    NAMESPACE: development
+    ENVIRONMENT: dev
+  environment:
+    name: development
+    url: https://dev.example.com
+    on_stop: stop_dev
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop"
+
+stop_dev:
+  stage: deploy
+  image: bitnami/kubectl:latest
+  script:
+    - kubectl delete namespace development
+  when: manual
+  environment:
+    name: development
+    action: stop
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop"
+
+deploy_staging:
+  <<: *deploy_definition
+  stage: deploy
+  variables:
+    KUBE_CONTEXT: staging
+    NAMESPACE: staging
+    ENVIRONMENT: staging
+  environment:
+    name: staging
+    url: https://staging.example.com
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  needs:
+    - build_docker
+    - unit_tests
+    - integration_tests
+
+deploy_production:
+  <<: *deploy_definition
+  stage: deploy
+  variables:
+    KUBE_CONTEXT: production
+    NAMESPACE: production
+    ENVIRONMENT: production
+    TIMEOUT: 10m
+  environment:
+    name: production
+    url: https://example.com
+  when: manual
+  only:
+    - tags
+  needs:
+    - build_docker
+    - unit_tests
+    - integration_tests
+    - container_scanning
+  before_script:
+    - *deploy_definition["before_script"]
+    - echo "Deploying version $CI_COMMIT_TAG to production"
+  script:
+    - |
+      # Canary deployment
+      helm upgrade --install $CI_PROJECT_NAME ./helm \
+        --namespace $NAMESPACE \
+        --set image.tag=$CI_COMMIT_TAG \
+        --set image.repository=$DOCKER_IMAGE \
+        --set environment=$ENVIRONMENT \
+        --set replicaCount=1 \
+        --set canary.enabled=true \
+        --values ./helm/values-production.yaml \
+        --wait --timeout 5m
+    # 运行冒烟测试
+    - kubectl run smoke-test --rm -i --restart=Never --image=curlimages/curl -- curl -sf https://example.com/health
+    - |
+      # 全量部署
+      helm upgrade --install $CI_PROJECT_NAME ./helm \
+        --namespace $NAMESPACE \
+        --set image.tag=$CI_COMMIT_TAG \
+        --set image.repository=$DOCKER_IMAGE \
+        --set environment=$ENVIRONMENT \
+        --set replicaCount=3 \
+        --set canary.enabled=false \
+        --values ./helm/values-production.yaml \
+        --wait --timeout 10m \
+        --atomic
+
+# ============ 通知 ============
+notify_success:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache curl
+  script:
+    - |
+      curl -X POST -H 'Content-type: application/json' \
+        --data "{\"text\":\"✅ Pipeline succeeded for $CI_PROJECT_NAME - $CI_COMMIT_REF_NAME\"}" \
+        $SLACK_WEBHOOK_URL
+  when: on_success
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+notify_failure:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache curl
+  script:
+    - |
+      curl -X POST -H 'Content-type: application/json' \
+        --data "{\"text\":\"❌ Pipeline failed for $CI_PROJECT_NAME - $CI_COMMIT_REF_NAME
+        <$CI_PIPELINE_URL|View Pipeline>\"}" \
+        $SLACK_WEBHOOK_URL
+  when: on_failure

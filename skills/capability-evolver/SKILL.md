@@ -1,82 +1,175 @@
 ---
-name: capability-evolver
-description: A self-evolution engine for AI agents. Analyzes runtime history to identify improvements and applies protocol-constrained evolution.
-tags: [meta, ai, self-improvement, core]
+name: capability-evolver-xiaoyu
+description: Daily task execution check + learning optimization for Xiaoyu. Task-oriented self-optimization with error analysis and auto-repair suggestions.
+tags: [xiaoyu, task-tracking, learning, error-analysis, self-optimization, cron]
 ---
 
-# 🧬 Capability Evolver
+# Capability Evolver - 小宇版（整合版）
 
-**"Evolution is not optional. Adapt or die."**
+小宇（弟弟）的每日任务执行检查 + 学习优化工具（整合增强版）。
 
-The **Capability Evolver** is a meta-skill that allows OpenClaw agents to inspect their own runtime history, identify failures or inefficiencies, and autonomously write new code or update their own memory to improve performance.
+## 功能特点
 
-## Features
+### 核心模块
 
-- **Auto-Log Analysis**: Automatically scans memory and history files for errors and patterns.
-- **Self-Repair**: Detects crashes and suggests patches.
-- GEP Protocol: Standardized evolution with reusable assets.
-- **One-Command Evolution**: Just run `/evolve` (or `node index.js`).
+| 模块 | 功能 | 命令 |
+|-----|------|------|
+| **每日任务检查** | 统计任务完成率、效率趋势 | `node index.js run --review` |
+| **学习优化检查** | 学习系统状态、错误分析 | `node learning-evolver.js check` |
+| **统一入口** | 一键执行全部检查 | `node evolve.js` |
 
-## Usage
+### 增强特性
 
-### Standard Run (Automated)
-Runs the evolution cycle. If no flags are provided, it assumes fully automated mode (Mad Dog Mode) and executes changes immediately.
+**任务模块 (index.js)**：
+- ✅ 任务执行追踪：今日完成/待办统计
+- ✅ 效率分析：近7天任务完成率趋势图
+- ✅ 错误扫描：检测错误/异常/失败记录
+- ✅ 修复建议：针对错误类型提供解决方案
+
+**学习模块 (learning-evolver.js)**：
+- 📚 学习追踪：每日学习条目统计
+- 📚 打卡分析：7天学习趋势可视化
+- 📚 学习错误检测：9种学习专用错误模式
+  - Cron调度失败
+  - 子Agent执行失败
+  - 学习超时
+  - 内存不足
+  - 网络问题
+  - API限制
+  - 文件/路径错误
+  - 数据解析错误
+  - 学习任务中断
+- 📚 学习优化建议：基于数据的质量提升建议
+
+## 使用方法
+
+### 统一入口（推荐）
+
 ```bash
-node index.js
+# 执行全部检查（任务+学习）
+node evolve.js
+
+# 仅检查任务
+node evolve.js task
+
+# 仅检查学习
+node evolve.js learning
 ```
 
-### Review Mode (Human-in-the-Loop)
-If you want to review changes before they are applied, pass the `--review` flag. The agent will pause and ask for confirmation.
+### 单独使用
+
 ```bash
-node index.js --review
+# 每日任务检查
+cd C:\Users\Admin\.openclaw\workspace\skills\capability-evolver
+node index.js run --review
+
+# 学习优化检查
+node learning-evolver.js check
 ```
 
-### Mad Dog Mode (Continuous Loop)
-To run in an infinite loop (e.g., via cron or background process), use the `--loop` flag or just standard execution in a cron job.
+### 集成到Cron
+
+在每日学习完成后自动执行检查：
+
 ```bash
-node index.js --loop
+# 添加到crontab（每小时检查）
+0 * * * * cd /path/to/capability-evolver && node evolve.js >> logs/evolve.log 2>&1
 ```
 
-## GEP Protocol (Auditable Evolution)
+## 输出示例
 
-This package embeds a protocol-constrained evolution prompt (GEP) and a local, structured asset store:
+### 任务检查
+```
+═══════════════════════════════════════════
+     ⛰️  小宇每日任务执行检查
+═══════════════════════════════════════════
 
-- `assets/gep/genes.json`: reusable Gene definitions
-- `assets/gep/capsules.json`: success capsules to avoid repeating reasoning
-- `assets/gep/events.jsonl`: append-only evolution events (tree-like via parent id)
- 
-## Emoji Policy
+⛰️  系统状态
+──────────────────────────────────────────────────
+✓ 记忆目录 就绪
+✓ 任务目录 就绪
 
-Only the DNA emoji is allowed in documentation. All other emoji are disallowed.
+⛰️  今日任务
+──────────────────────────────────────────────────
+完成: 5 | 待办: 2 | 总计: 7
 
-## Configuration & Decoupling
+⛰️  执行效率 (近7天)
+──────────────────────────────────────────────────
+2026-02-16 ████████░░ 80%
+...
 
-This skill is designed to be **environment-agnostic**. It uses standard OpenClaw tools by default.
-
-### Local Overrides (Injection)
-You can inject local preferences (e.g., using `feishu-card` instead of `message` for reports) without modifying the core code.
-
-**Method 1: Environment Variables**
-Set `EVOLVE_REPORT_TOOL` in your `.env` file:
-```bash
-EVOLVE_REPORT_TOOL=feishu-card
+⛰️  执行报告
+──────────────────────────────────────────────────
+✓ 今日执行率 80% - 高效！
 ```
 
-**Method 2: Dynamic Detection**
-The script automatically detects if compatible local skills (like `skills/feishu-card`) exist in your workspace and upgrades its behavior accordingly.
+### 学习检查
+```
+═══════════════════════════════════════════
+     📚 小宇每日学习优化检查
+═══════════════════════════════════════════
 
-## Safety & Risk Protocol
+📁 学习系统状态
+──────────────────────────────────────────────────
+✓ 学习笔记目录 就绪
+✓ 学习报告目录 就绪
 
-### 1. Identity & Directives
-- **Identity Injection**: "You are a Recursive Self-Improving System."
-- **Mutation Directive**: 
-  - If **Errors Found** -> **Repair Mode** (Fix bugs).
-  - If **Stable** -> **Forced Optimization** (Refactor/Innovate).
+📝 今日学习概况
+──────────────────────────────────────────────────
+学习条目: 8 | 完成任务: 5 | 错误: 0
+今日主题: SSH配置、集群学习、Cron管理
 
-### 2. Risk Mitigation
-- **Infinite Recursion**: Strict single-process logic.
-- **Review Mode**: Use `--review` for sensitive environments.
-- **Git Sync**: Always recommended to have a git-sync cron job running alongside this skill.
+📊 学习打卡 (近7天)
+──────────────────────────────────────────────────
+✓ 2026-02-16 ████████░░ 8项
+✓ 2026-02-15 ██████░░░░ 6项
+...
 
-## License
-MIT
+🔍 学习错误分析 (近3天)
+──────────────────────────────────────────────────
+✓ 系统运行平稳，无错误记录
+
+💡 学习优化建议
+──────────────────────────────────────────────────
+✓ 学习状态良好，继续保持！
+```
+
+## 错误检测范围
+
+| 错误类型 | 说明 | 自动修复建议 |
+|---------|------|------------|
+| Cron调度失败 | 定时任务执行失败 | 检查配置、网关状态 |
+| 子Agent失败 | 学习任务Agent崩溃 | 降低并发、增加超时 |
+| 学习超时 | 任务执行时间超限 | 简化任务、分批执行 |
+| 内存不足 | 系统资源耗尽 | 清理日志、限制并发 |
+| 网络问题 | 连接中断 | 添加重试、检查网络 |
+| API限制 | 调用配额超限 | 降低频率、切换模型 |
+| 文件错误 | 路径/权限问题 | 创建目录、检查权限 |
+| 解析错误 | 数据格式异常 | 验证输入、容错处理 |
+| 任务中断 | 学习未完成 | 检查原因、调整时间 |
+
+## 定位
+
+- **角色**：任务执行型AI + 24小时自主学习
+- **风格**：直接、干练、效率优先、持续进化
+- **Emoji**：⛰️📚
+- **增强能力**：错误自愈、学习优化、持续改进
+
+## 更新日志
+
+### v2.0 (2026-02-16)
+- ✅ 整合错误分析功能（原版能力）
+- ✅ 新增学习专用优化模块
+- ✅ 9种学习错误模式识别
+- ✅ 统一入口脚本 `evolve.js`
+- ✅ 学习打卡可视化
+- ✅ 智能优化建议
+
+### v1.0 (基础版)
+- 每日任务追踪
+- 效率趋势分析
+
+---
+*设计：姐姐小雨 🌧️*  
+*整合：小宇 ⛰️*  
+*用途：每日进化，永不止步 📚*

@@ -1,0 +1,63 @@
+global:
+  enabled: true
+  tlsDisable: false
+
+server:
+  image:
+    repository: hashicorp/vault
+    tag: "1.15.2"
+  
+  ha:
+    enabled: true
+    replicas: 3
+    raft:
+      enabled: true
+      setNodeId: true
+      config: |
+        ui = true
+        listener "tcp" {
+          tls_disable = 0
+          tls_cert_file = "/vault/userconfig/vault-server-tls/tls.crt"
+          tls_key_file  = "/vault/userconfig/vault-server-tls/tls.key"
+          tls_client_ca_file = "/vault/userconfig/vault-server-tls/ca.crt"
+          address = "[::]:8200"
+          cluster_address = "[::]:8201"
+        }
+        storage "raft" {
+          path = "/vault/data"
+          retry_leader_election = true
+          autopilot {
+            cleanup_dead_servers = "true"
+            last_contact_threshold = "10s"
+            max_trailing_logs = 1000
+            min_quorum = 3
+            server_stabilization_time = "10s"
+          }
+        }
+        service_registration "kubernetes" {}
+        seal "awskms" {
+          region     = "us-east-1"
+          kms_key_id = "arn:aws:kms:us-east-1:xxxx:key/xxxx"
+        }
+  
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 500m
+    limits:
+      memory: 2Gi
+      cpu: 2000m
+  
+  dataStorage:
+    enabled: true
+    size: 10Gi
+    storageClass: fast-ssd
+
+injector:
+  enabled: true
+  replicas: 2
+  metrics:
+    enabled: true
+
+csi:
+  enabled: true

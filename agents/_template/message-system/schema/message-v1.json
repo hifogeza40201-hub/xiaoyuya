@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Message Schema v1",
+  "type": "object",
+  "required": ["msg_id", "platform", "timestamp", "content"],
+  "properties": {
+    "msg_id": {
+      "type": "string",
+      "pattern": "^msg_[a-z]+_\\d+_[a-z0-9]+$",
+      "description": "消息唯一标识"
+    },
+    "platform": {
+      "type": "string",
+      "enum": ["telegram", "dingtalk", "webchat", "discord", "slack"],
+      "description": "消息来源平台"
+    },
+    "chat_id": {
+      "type": "string",
+      "description": "群组ID或私聊标识"
+    },
+    "thread_id": {
+      "type": ["string", "null"],
+      "description": "话题/线程ID"
+    },
+    "sender": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "role": {
+          "type": "string",
+          "enum": ["user", "assistant", "system"],
+          "default": "user"
+        }
+      }
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601格式时间戳"
+    },
+    "content": {
+      "type": "object",
+      "required": ["type", "body"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["text", "image", "file", "voice", "video"]
+        },
+        "body": { "type": "string" },
+        "metadata": {
+          "type": "object",
+          "description": "附加元数据"
+        }
+      }
+    },
+    "reply_to": {
+      "type": ["string", "null"],
+      "description": "父消息ID"
+    },
+    "context_hash": {
+      "type": "string",
+      "description": "用于去重的内容哈希"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^#[a-zA-Z0-9_\\u4e00-\\u9fa5]+$" }
+    }
+  }
+}

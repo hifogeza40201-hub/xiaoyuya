@@ -1,12 +1,39 @@
-# HEARTBEAT.md - 每日例行任务清单
+# HEARTBEAT.md - 多Agent标准化心跳检查
 
-_每天早上检查一次，保持系统健康运行_
+_一套系统，全家共享。小宇、小雨、小语统一检查。_
+
+---
+
+## 多Agent统一检查 🏠
+
+现在三套系统已标准化，全家共享同一套模板。
+
+### Agent 状态总览
+
+| Agent | 角色 | 备份时间 | 学习时间 | 状态 |
+|-------|------|---------|---------|------|
+| 小宇 ⛰️ | 弟弟 | 02:00 | 8轮/天 | ✅ 运行中 |
+| 小雨 🌧️ | 姐姐 | 02:30 | 3轮/天 | ⏳ 待部署 |
+| 小语 🌸 | 妹妹 | 03:00 | 8轮/天 | ⏳ 待部署 |
+
+### 批量检查命令
+
+```powershell
+# 检查所有Agent备份状态
+Get-ChildItem D:\critical-backup-* -Directory | Select-Object Name,LastWriteTime
+
+# 检查所有Cron任务
+openclaw cron list | Select-String "xiaoyu"
+
+# 查看所有Agent日志
+tail -f logs/backup-*.log
+```
 
 ---
 
 ## 每日任务
 
-### 1. 数据备份 ⛰️
+### 1. 数据备份 ⛰️🌧️🌸
 **时间**: 每日 06:00
 **优先级**: 高
 

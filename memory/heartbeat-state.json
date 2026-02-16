@@ -1,9 +1,19 @@
 {
   "gateway": {
-    "lastCheck": "2026-02-13T19:30:00+08:00",
+    "lastCheck": "2026-02-16T03:00:00+08:00",
     "status": "healthy",
     "rpcProbe": "ok",
     "address": "ws://127.0.0.1:18792",
     "restarts": 0
+  },
+  "lastChecks": {
+    "email": 1739635200,
+    "calendar": 1739635200,
+    "weather": 1739635200
+  },
+  "maintenance": {
+    "lastRun": "2026-02-16T03:00:00+08:00",
+    "status": "completed",
+    "tasks": ["cleanup_contexts", "system_check", "organize_memory"]
   }
 }

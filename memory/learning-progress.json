@@ -23,5 +23,18 @@
         "status": "completed"
       }
     ]
+  },
+  "2026-02-16": {
+    "topic": "PowerShell进阶：模块与错误处理",
+    "completed": true,
+    "check_time": "00:19:00",
+    "rounds": [
+      {
+        "time": "00:16",
+        "type": "集群学习",
+        "agents": 4,
+        "status": "completed"
+      }
+    ]
   }
 }

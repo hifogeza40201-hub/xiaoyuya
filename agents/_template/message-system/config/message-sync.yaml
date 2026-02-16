@@ -1,0 +1,59 @@
+# 消息同步配置
+# 各Agent差异化配置
+
+sync:
+  enabled: true
+  
+  # 存储策略
+  storage:
+    hot_days: 7          # 热数据保留天数
+    warm_days: 30        # 温数据保留天数
+    archive_format: "jsonl"  # 归档格式
+    
+  # 索引配置
+  indexing:
+    enabled: true
+    engine: "sqlite_fts5"  # sqlite_fts5 | none
+    auto_index: true
+    
+  # 自动标签
+  auto_tag:
+    enabled: true
+    config_file: "config/tag-rules.yaml"
+    
+  # 同步触发
+  trigger:
+    # Webhook (如果平台支持)
+    webhook:
+      enabled: false
+      port: 8081
+      
+    # OpenClaw心跳检查
+    heartbeat:
+      enabled: true
+      interval_minutes: 30
+      
+    # 定时归档
+    schedule:
+      enabled: true
+      cron: "0 2 * * *"  # 每天凌晨2点
+      
+  # 跨平台关联
+  cross_platform:
+    enabled: true
+    link_file: "memory/message-links.json"
+    
+  # 归档目标
+  archive:
+    local:
+      enabled: true
+      path: "D:\\chat-archive"
+    github:
+      enabled: false
+      repo: ""
+      token: ""
+      
+  # 日志
+  logging:
+    level: "info"  # debug | info | warn | error
+    file: "logs/message-sync.log"

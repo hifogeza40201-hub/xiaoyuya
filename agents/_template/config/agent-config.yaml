@@ -1,0 +1,56 @@
+# Agent 基础配置模板
+# 会被 setup-agent.ps1 根据角色参数填充
+
+id: {{AGENT_ID}}
+name: {{AGENT_NAME}}
+emoji: {{EMOJI}}
+role: {{ROLE}}
+
+# OpenClaw 基础配置
+openclaw:
+  gateway:
+    host: localhost
+    port: 8080
+  
+  # 消息通道配置
+  channels:
+    telegram:
+      enabled: true
+      # 实际token从环境变量或配置文件读取
+    dingtalk:
+      enabled: true
+      # 实际配置从配置文件读取
+
+# 备份配置
+backup:
+  enabled: true
+  schedule: "0 {{BACKUP_HOUR}} * * *"  # 每日执行时间
+  root: "D:\\"
+  retentionDays: 30
+  
+# 学习系统配置
+learning:
+  enabled: true
+  capabilityEvolver:
+    enabled: true
+    checkInterval: "0 {{CHECK_HOUR}} * * *"  # 能力进化检查时间
+  
+  # 学习轮次（会被身份配置覆盖）
+  rounds: {{LEARNING_ROOUNDS}}
+
+# 健康检查配置
+healthcheck:
+  enabled: true
+  heartbeatSchedule: "0 {{HEARTBEAT_HOUR}} * * *"
+  checks:
+    - diskSpace
+    - memoryUsage
+    - cronStatus
+    - backupStatus
+
+# 消息发送配置
+messaging:
+  morningGreeting: {{MORNING_GREETING}}
+  eveningGreeting: {{EVENING_GREETING}}
+  targetChannels:
+    - telegram:-5173207194  # 家庭群组

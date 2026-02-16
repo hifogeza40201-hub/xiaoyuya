@@ -1,0 +1,32 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: istio-mtls-config
+spec:
+  profile: default
+  meshConfig:
+    enableAutoMtls: true
+    defaultConfig:
+      proxyMetadata:
+        ISTIO_META_DNS_CAPTURE: "true"
+    trustDomain: cluster.local
+    trustDomainAliases:
+    - "*.cluster.local"
+  components:
+    pilot:
+      k8s:
+        resources:
+          requests:
+            cpu: 2000m
+            memory: 4Gi
+  values:
+    global:
+      proxy:
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 2000m
+            memory: 1Gi
+      caAddress: cert-manager-istio-csr.cert-manager.svc:443

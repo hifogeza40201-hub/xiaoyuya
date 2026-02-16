@@ -1,0 +1,58 @@
+# Cron 任务模板
+# 会被 setup-agent.ps1 根据角色参数生成
+
+jobs:
+  # 每日备份
+  - name: "{{AGENT_ID}}-daily-backup"
+    enabled: true
+    schedule:
+      kind: cron
+      expr: "0 {{BACKUP_HOUR}} * * *"
+      tz: Asia/Shanghai
+    sessionTarget: isolated
+    wakeMode: now
+    payload:
+      kind: agentTurn
+      message: "执行每日备份：备份 {{AGENT_NAME}} 的记忆文件、配置到 D:\\critical-backup-{{AGENT_ID}}\\"
+      thinking: low
+    delivery:
+      mode: silent
+
+  # 能力进化检查
+  - name: "{{AGENT_ID}}-capability-evolver"
+    enabled: true
+    schedule:
+      kind: cron
+      expr: "0 {{CHECK_HOUR}} * * *"
+      tz: Asia/Shanghai
+    sessionTarget: isolated
+    wakeMode: now
+    payload:
+      kind: agentTurn
+      message: "{{EMOJI}} 执行 {{AGENT_NAME}} 每日能力进化检查：分析任务执行历史、学习进度、识别改进点、自我优化"
+      thinking: low
+    delivery:
+      mode: announce
+      channel: telegram
+
+  # 学习轮次（动态生成，根据LEARNING_ROUNDS）
+{{LEARNING_JOBS}}
+
+  # 早安消息（可选）
+{{MORNING_JOB}}
+
+  # 晚安消息（可选）
+{{EVENING_JOB}}
+
+  # Token 监控
+  - name: "{{AGENT_ID}}-token-monitor"
+    enabled: true
+    schedule:
+      kind: cron
+      expr: "0 */2 * * *"
+      tz: Asia/Shanghai
+    sessionTarget: main
+    wakeMode: now
+    payload:
+      kind: systemEvent
+      text: "检查Token使用情况：如果上下文占用超过80%，发送提醒"

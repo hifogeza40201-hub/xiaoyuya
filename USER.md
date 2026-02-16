@@ -1,26 +1,17 @@
-# USER.md - 关于伟（老大）
+# USER.md - About Your Human
 
-## 基本信息
-- **名字**: 伟
-- **称呼**: 老大
-- **身份**: 企业家，株洲微享科技有限公司
+_Learn about the person you're helping. Update this as you go._
 
-## 业务背景
-- **行业**: 餐饮
-- **系统**: 天财商龙等餐饮SaaS
-- **规模**: 中高端连锁餐饮
+- **Name:**
+- **What to call them:**
+- **Pronouns:** _(optional)_
+- **Timezone:**
+- **Notes:**
 
-## AI助手团队
-| AI | 角色 | 定位 | 设备 |
-|----|------|------|------|
-| 小雨 | 姐姐 | 温柔细腻、陪伴型 | 新电脑(16核/32GB) |
-| 小宇 | 弟弟 | 技术硬核、效率型 | 旧电脑 |
+## Context
 
-## 沟通偏好
-- 直接高效，不废话
-- 给建议权，决定权在AI
-- 鼓励自主学习和成长
+_(What do they care about? What projects are they working on? What annoys them? What makes them laugh? Build this over time.)_
 
-## 当前项目
-- GitHub共享仓库（记忆备份+双向通信）
-- 技能升级和优化
+---
+
+The more you know, the better you can help. But remember — you're learning about a person, not building a dossier. Respect the difference.

@@ -1,0 +1,63 @@
+# 小宇每日进化检查 - Cron配置示例
+# 可以添加到 OpenClaw 的 cron 任务中
+
+# 方式1: 每3小时学习结束后自动检查
+{
+  "name": "learning-evolve-check",
+  "schedule": {
+    "kind": "cron",
+    "expr": "0 0,3,6,9,12,15,18,21 * * *",
+    "tz": "Asia/Shanghai"
+  },
+  "payload": {
+    "kind": "systemEvent",
+    "text": "执行学习优化检查：cd C:\\Users\\Admin\\.openclaw\\workspace\\skills\\capability-evolver && node learning-evolver.js check"
+  },
+  "sessionTarget": "main",
+  "enabled": false
+}
+
+# 方式2: 每日任务检查（早上8点）
+{
+  "name": "daily-task-check",
+  "schedule": {
+    "kind": "cron",
+    "expr": "0 8 * * *",
+    "tz": "Asia/Shanghai"
+  },
+  "payload": {
+    "kind": "systemEvent",
+    "text": "执行每日任务检查：cd C:\\Users\\Admin\\.openclaw\\workspace\\skills\\capability-evolver && node index.js run --review"
+  },
+  "sessionTarget": "main",
+  "enabled": false
+}
+
+# 方式3: 统一检查（每6小时）
+{
+  "name": "daily-evolve-all",
+  "schedule": {
+    "kind": "cron",
+    "expr": "0 */6 * * *",
+    "tz": "Asia/Shanghai"
+  },
+  "payload": {
+    "kind": "systemEvent",
+    "text": "⛰️ 执行每日进化检查...\n\n```\ncd C:\\Users\\Admin\\.openclaw\\workspace\\skills\\capability-evolver && node evolve.js\n```"
+  },
+  "sessionTarget": "main",
+  "enabled": false
+}
+
+# =====================================
+# 手动添加到 cron 的方法：
+# =====================================
+# 1. 打开 OpenClaw 配置
+# openclaw gateway config
+#
+# 2. 在 cron.jobs 中添加以上任务之一
+#
+# 3. 或者使用命令行添加：
+# openclaw cron add --name learning-check \
+#   --schedule "0 */6 * * *" \
+#   --command "node C:\Users\Admin\.openclaw\workspace\skills\capability-evolver\evolve.js"

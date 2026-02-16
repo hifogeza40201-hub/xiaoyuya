@@ -1,0 +1,69 @@
+# 全局严格 mTLS 策略
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: istio-system
+spec:
+  mtls:
+    mode: STRICT
+---
+# 特定命名空间覆盖（兼容非 mTLS）
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: permissive-workload
+  namespace: legacy-system
+spec:
+  mtls:
+    mode: PERMISSIVE
+  selector:
+    matchLabels:
+      app: legacy-app
+---
+# 服务级访问控制
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: payment-service-policy
+  namespace: production
+spec:
+  selector:
+    matchLabels:
+      app: payment-service
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/production/sa/order-service"]
+    to:
+    - operation:
+        methods: ["POST"]
+        paths: ["/api/v1/payments/*"]
+    when:
+    - key: request.auth.claims[groups]
+      values: ["payment-operators"]
+  - from:
+    - source:
+        namespaces: ["istio-system", "monitoring"]
+    to:
+    - operation:
+        methods: ["GET"]
+        paths: ["/health", "/ready"]
+---
+# JWT 请求认证
+apiVersion: security.istio.io/v1beta1
+kind: RequestAuthentication
+metadata:
+  name: api-jwt-auth
+  namespace: production
+spec:
+  selector:
+    matchLabels:
+      app: api-gateway
+  jwtRules:
+  - issuer: "https://auth.example.com/realms/production"
+    jwksUri: "https://auth.example.com/realms/production/protocol/openid-connect/certs"
+    audiences: ["api-gateway"]
+    forwardOriginalToken: true
+    outputPayloadToHeader: x-jwt-payload

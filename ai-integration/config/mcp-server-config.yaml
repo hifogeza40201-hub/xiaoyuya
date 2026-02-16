@@ -1,0 +1,487 @@
+# MCP服务器配置模板
+
+## 1. 基础配置文件 (mcp-server.yaml)
+
+```yaml
+# MCP服务器主配置
+server:
+  name: enterprise-mcp-server
+  version: 1.0.0
+  port: 3000
+  host: 0.0.0.0
+  
+  # 协议配置
+  protocol:
+    version: "2024-11-05"
+    capabilities:
+      - tools
+      - resources
+      - prompts
+      - sampling
+      
+  # 传输层配置
+  transport:
+    type: stdio  # stdio | http | websocket
+    http:
+      cors:
+        enabled: true
+        origins: ["*"]
+      sse:
+        enabled: true
+        endpoint: /sse
+        
+# 模型提供商配置
+providers:
+  claude:
+    enabled: true
+    api_key: ${CLAUDE_API_KEY}
+    base_url: https://api.anthropic.com
+    model: claude-3-5-sonnet-20241022
+    max_tokens: 4096
+    temperature: 0.7
+    
+  grok:
+    enabled: true
+    api_key: ${GROK_API_KEY}
+    base_url: https://api.x.ai/v1
+    model: grok-3
+    max_tokens: 4096
+    temperature: 0.7
+    
+  openai:
+    enabled: false
+    api_key: ${OPENAI_API_KEY}
+    base_url: https://api.openai.com/v1
+    model: gpt-4-turbo-preview
+
+# 工具注册配置
+tools:
+  registry:
+    auto_discover: true
+    scan_paths:
+      - ./tools
+      - ./custom-tools
+    
+  # 内置工具配置
+  builtin:
+    - name: database_query
+      enabled: true
+      config:
+        max_rows: 1000
+        timeout: 30s
+        allowed_databases:
+          - oracle_production
+          - mysql_analytics
+          
+    - name: sap_connector
+      enabled: true
+      config:
+        host: ${SAP_HOST}
+        port: 3300
+        username: ${SAP_USER}
+        password: ${SAP_PASS}
+        
+    - name: document_processor
+      enabled: true
+      config:
+        supported_formats: [pdf, docx, xlsx, txt]
+        max_file_size: 50MB
+        ocr_enabled: true
+
+# 资源配置
+resources:
+  templates:
+    - uri_template: "file:///{path}"
+      name: filesystem
+      config:
+        base_path: /data/resources
+        allowed_extensions: [".txt", ".pdf", ".md"]
+        
+    - uri_template: "db://{table}/{id}"
+      name: database
+      config:
+        connection_pool_size: 10
+        
+  # 静态资源
+  static:
+    - uri: "docs://company-handbook"
+      name: 员工手册
+      mime_type: text/markdown
+      path: /resources/handbook.md
+
+# 提示模板配置
+prompts:
+  templates:
+    - name: data_analyst
+      description: 数据分析助手
+      template: |
+        你是一位资深数据分析师，擅长从数据中发现洞察。
+        
+        用户问题: {{user_query}}
+        相关数据: {{data_context}}
+        
+        请提供:
+        1. 数据概览
+        2. 关键发现
+        3. 可视化建议
+        4. 业务建议
+        
+    - name: code_assistant
+      description: 编程助手
+      template: |
+        你是一位专业的软件工程师。
+        
+        编程语言: {{language}}
+        任务描述: {{task}}
+        
+        要求:
+        - 代码简洁高效
+        - 包含必要的注释
+        - 考虑边界情况
+        - 遵循最佳实践
+
+# 企业系统集成
+integrations:
+  erp:
+    type: sap
+    enabled: true
+    config:
+      host: ${SAP_HOST}
+      system_id: PRD
+      client: 800
+      
+  crm:
+    type: salesforce
+    enabled: false
+    config:
+      instance_url: ${SFDC_URL}
+      api_version: v59.0
+      
+  oa:
+    type: dingtalk
+    enabled: true
+    config:
+      app_key: ${DINGTALK_APP_KEY}
+      app_secret: ${DINGTALK_APP_SECRET}
+      agent_id: ${DINGTALK_AGENT_ID}
+
+# 安全配置
+security:
+  authentication:
+    type: api_key  # api_key | jwt | oauth2
+    api_key_header: X-API-Key
+    
+  authorization:
+    rbac:
+      enabled: true
+      roles:
+        - name: admin
+          permissions: ["*"]
+        - name: analyst
+          permissions: ["tools:database_query", "tools:document_processor"]
+        - name: user
+          permissions: ["tools:document_processor"]
+          
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 100
+    burst_size: 20
+    
+  audit:
+    enabled: true
+    log_all_requests: true
+    mask_sensitive_data: true
+    retention_days: 90
+
+# 日志配置
+logging:
+  level: info  # debug | info | warn | error
+  format: json  # json | text
+  output: stdout  # stdout | file | both
+  file:
+    path: /var/log/mcp-server.log
+    max_size: 100MB
+    max_backups: 10
+    max_age: 30
+```
+
+## 2. 工具定义示例
+
+```json
+{
+  "tools": [
+    {
+      "name": "query_sales_data",
+      "description": "查询销售数据，支持按时间、区域、产品等维度筛选",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "start_date": {
+            "type": "string",
+            "description": "开始日期 (YYYY-MM-DD)"
+          },
+          "end_date": {
+            "type": "string",
+            "description": "结束日期 (YYYY-MM-DD)"
+          },
+          "region": {
+            "type": "string",
+            "enum": ["华北", "华东", "华南", "西部"],
+            "description": "销售区域"
+          },
+          "metrics": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["revenue", "quantity", "profit", "customers"]
+            },
+            "description": "要查询的指标"
+          }
+        },
+        "required": ["start_date", "end_date"]
+      }
+    },
+    {
+      "name": "create_workflow",
+      "description": "创建审批流程",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "process_type": {
+            "type": "string",
+            "enum": ["leave", "expense", "purchase", "contract"],
+            "description": "流程类型"
+          },
+          "applicant": {
+            "type": "string",
+            "description": "申请人ID"
+          },
+          "details": {
+            "type": "object",
+            "description": "流程详情"
+          },
+          "approvers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "审批人列表"
+          }
+        },
+        "required": ["process_type", "applicant", "details"]
+      }
+    },
+    {
+      "name": "generate_report",
+      "description": "生成业务报表",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "report_type": {
+            "type": "string",
+            "enum": ["sales", "inventory", "financial", "hr"],
+            "description": "报表类型"
+          },
+          "period": {
+            "type": "string",
+            "enum": ["daily", "weekly", "monthly", "quarterly", "yearly"],
+            "description": "报表周期"
+          },
+          "format": {
+            "type": "string",
+            "enum": ["pdf", "excel", "html"],
+            "default": "pdf",
+            "description": "输出格式"
+          }
+        },
+        "required": ["report_type", "period"]
+      }
+    }
+  ]
+}
+```
+
+## 3. 客户端连接配置
+
+```json
+{
+  "mcpClients": {
+    "enterprise_server": {
+      "command": "node",
+      "args": ["/opt/mcp-server/dist/index.js"],
+      "env": {
+        "CLAUDE_API_KEY": "${CLAUDE_API_KEY}",
+        "SAP_HOST": "sap.company.com",
+        "NODE_ENV": "production"
+      },
+      "disabled": false,
+      "autoApprove": [],
+      "timeout": 60000
+    },
+    "local_tools": {
+      "command": "python",
+      "args": ["-m", "mcp_server_local", "--port", "3001"],
+      "env": {
+        "WHISPER_MODEL": "large-v3",
+        "TTS_ENGINE": "chattts"
+      }
+    }
+  }
+}
+```
+
+## 4. Kubernetes部署配置
+
+```yaml
+# mcp-server-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcp-server
+  namespace: ai-platform
+  labels:
+    app: mcp-server
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mcp-server
+  template:
+    metadata:
+      labels:
+        app: mcp-server
+    spec:
+      containers:
+      - name: mcp-server
+        image: company-registry/mcp-server:v1.0.0
+        ports:
+        - containerPort: 3000
+        env:
+        - name: CLAUDE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ai-api-keys
+              key: claude
+        - name: GROK_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ai-api-keys
+              key: grok
+        - name: SAP_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: mcp-config
+              key: sap-host
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "2000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: config
+          mountPath: /app/config
+        - name: logs
+          mountPath: /var/log
+      volumes:
+      - name: config
+        configMap:
+          name: mcp-server-config
+      - name: logs
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mcp-server
+  namespace: ai-platform
+spec:
+  selector:
+    app: mcp-server
+  ports:
+  - port: 3000
+    targetPort: 3000
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mcp-server
+  namespace: ai-platform
+  annotations:
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+spec:
+  tls:
+  - hosts:
+    - mcp.company.com
+    secretName: mcp-tls
+  rules:
+  - host: mcp.company.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: mcp-server
+            port:
+              number: 3000
+```
+
+## 5. 环境变量配置
+
+```bash
+# .env.example
+
+# AI API Keys
+CLAUDE_API_KEY=sk-ant-api03-xxxxxxxxxxxxxxxx
+GROK_API_KEY=xai-xxxxxxxxxxxxxxxx
+OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxx
+
+# Database
+DATABASE_URL=postgresql://user:pass@localhost:5432/mcp_db
+REDIS_URL=redis://localhost:6379/0
+
+# Enterprise Systems
+SAP_HOST=sap.company.com
+SAP_PORT=3300
+SAP_USER=mcp_service
+SAP_PASS=secure_password
+
+DINGTALK_APP_KEY=dingxxxxxxxxxxxxxxxx
+DINGTALK_APP_SECRET=xxxxxxxxxxxxxxxx
+DINGTALK_AGENT_ID=123456789
+
+# Local AI Models
+WHISPER_MODEL_PATH=/models/whisper-large-v3
+TTS_MODEL_PATH=/models/chattts
+LLM_MODEL_PATH=/models/qwen2.5-14b
+
+# Server Config
+MCP_PORT=3000
+MCP_HOST=0.0.0.0
+LOG_LEVEL=info
+NODE_ENV=production
+
+# Security
+JWT_SECRET=your-secret-key-here
+API_KEY_SALT=random-salt-string
+ENCRYPTION_KEY=32-byte-encryption-key
+
+# Monitoring
+PROMETHEUS_ENABLED=true
+JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+```

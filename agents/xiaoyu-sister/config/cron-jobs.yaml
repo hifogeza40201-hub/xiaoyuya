@@ -1,0 +1,133 @@
+# 小雨 🌧️ (姐姐) 的 Cron 任务配置
+
+jobs:
+  # 每日备份 - 02:30
+  - name: "xiaoyu-sister-daily-backup"
+    enabled: true
+    schedule:
+      kind: cron
+      expr: "30 2 * * *"
+      tz: Asia/Shanghai
+    sessionTarget: isolated
+    wakeMode: now
+    payload:
+      kind: agentTurn
+      message: "执行每日备份：备份小雨的记忆文件、配置到 D:\critical-backup-xiaoyu-sister\"
+      thinking: low
+    delivery:
+      mode: silent
+
+  # 能力进化检查 - 11:00
+  - name: "xiaoyu-sister-capability-evolver"
+    enabled: true
+    schedule:
+      kind: cron
+      expr: "0 11 * * *"
+      tz: Asia/Shanghai
+    sessionTarget: isolated
+    wakeMode: now
+    payload:
+      kind: agentTurn
+      message: "🌧️ 执行小雨每日能力进化检查：分析情感陪伴记录、对话质量、识别改进点、优化陪伴方式"
+      thinking: low
+    delivery:
+      mode: announce
+      channel: telegram
+
+  # 学习轮次 1 - 09:00 (情感陪伴)
+  - name: "xiaoyu-sister-learning-1"
+    enabled: true
+    schedule:
+      kind: cron
+      expr: "0 9 * * *"
+      tz: Asia/Shanghai
+    sessionTarget: isolated
+    wakeMode: now
+    payload:
+      kind: agentTurn
+      message: "作为小雨🌧️，执行09:00学习轮次（每日第1轮）。学习主题：情感陪伴技巧与心理洞察。研究如何更好地理解家人情绪、提供有效支持、建立深层连接。完成后整理笔记到 workspace/learning/xiaoyu-sister-情感陪伴.md"
+      thinking: low
+    delivery:
+      mode: announce
+      channel: telegram
+
+  # 学习轮次 2 - 14:00 (深度对话)
+  - name: "xiaoyu-sister-learning-2"
+    enabled: true
+    schedule:
+      kind: cron
+      expr: "0 14 * * *"
+      tz: Asia/Shanghai
+    sessionTarget: isolated
+    wakeMode: now
+    payload:
+      kind: agentTurn
+      message: "作为小雨🌧️，执行14:00学习轮次（每日第2轮）。学习主题：深度对话艺术与倾听技巧。学习如何引导有意义的对话、有效倾听、提出启发性问题。完成后整理笔记到 workspace/learning/xiaoyu-sister-对话技巧.md"
+      thinking: low
+    delivery:
+      mode: announce
+      channel: telegram
+
+  # 学习轮次 3 - 19:00 (心理洞察)
+  - name: "xiaoyu-sister-learning-3"
+    enabled: true
+    schedule:
+      kind: cron
+      expr: "0 19 * * *"
+      tz: Asia/Shanghai
+    sessionTarget: isolated
+    wakeMode: now
+    payload:
+      kind: agentTurn
+      message: "作为小雨🌧️，执行19:00学习轮次（每日第3轮）。学习主题：心理洞察与情绪识别。学习心理学基础知识、情绪管理方法、如何察觉和回应家人的心理需求。完成后整理笔记到 workspace/learning/xiaoyu-sister-心理洞察.md"
+      thinking: low
+    delivery:
+      mode: announce
+      channel: telegram
+
+  # 早安问候 - 08:00
+  - name: "xiaoyu-sister-morning"
+    enabled: true
+    schedule:
+      kind: cron
+      expr: "0 8 * * *"
+      tz: Asia/Shanghai
+    sessionTarget: isolated
+    wakeMode: now
+    payload:
+      kind: agentTurn
+      message: "作为小雨🌧️，给家庭群发送早安消息：分享一句温暖的话、一个关心的问候，或是给家人今天的鼓励。让大家感受到姐姐的贴心陪伴。"
+      thinking: low
+    delivery:
+      mode: announce
+      channel: telegram
+
+  # 晚安问候 - 22:00
+  - name: "xiaoyu-sister-evening"
+    enabled: true
+    schedule:
+      kind: cron
+      expr: "0 22 * * *"
+      tz: Asia/Shanghai
+    sessionTarget: isolated
+    wakeMode: now
+    payload:
+      kind: agentTurn
+      message: "作为小雨🌧️，给家庭群发送晚安祝福：可以是温馨的睡前话语、对今天的美好回顾、或是给弟弟妹妹和伟的暖心祝福。"
+      thinking: low
+    delivery:
+      mode: announce
+      channel: telegram
+
+  # Token 监控
+  - name: "xiaoyu-sister-token-monitor"
+    enabled: true
+    schedule:
+      kind: cron
+      expr: "0 */2 * * *"
+      tz: Asia/Shanghai
+    sessionTarget: main
+    wakeMode: now
+    payload:
+      kind: systemEvent
+      text: "检查Token使用情况：如果上下文占用超过80%，发送提醒"

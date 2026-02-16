@@ -1,0 +1,19 @@
+{
+  "sync_date": "2026-02-14",
+  "timestamp": "2026-02-15T22:35:25.386758",
+  "config": {
+    "version": "1.0.0",
+    "batch_size": 1000,
+    "max_workers": 4
+  },
+  "statistics": {
+    "total_records": 200,
+    "processed_records": 200,
+    "failed_records": 0,
+    "api_calls": 2,
+    "db_inserts": 200,
+    "success_rate": 100.0
+  },
+  "errors": [],
+  "duration_seconds": 1.112295
+}
