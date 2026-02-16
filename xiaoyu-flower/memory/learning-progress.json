@@ -1,0 +1,27 @@
+{
+  "2026-02-14": {
+    "topic": "新技术探索",
+    "completed": true,
+    "check_time": "09:00:00",
+    "rounds": [
+      {
+        "time": "00:20",
+        "type": "集群学习第1轮",
+        "agents": 4,
+        "status": "completed"
+      },
+      {
+        "time": "05:42",
+        "type": "集群学习第2轮",
+        "agents": 4,
+        "status": "completed"
+      },
+      {
+        "time": "09:00",
+        "type": "每日学习计划",
+        "agents": 1,
+        "status": "completed"
+      }
+    ]
+  }
+}
