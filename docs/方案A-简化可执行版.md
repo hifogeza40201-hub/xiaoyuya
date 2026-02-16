@@ -108,80 +108,158 @@ Done!
 
 ---
 
-## 🛠️ 一键脚本（复制即用，不用学Git）
+## 🛠️ 一键脚本（完整代码，复制即用）
 
-### 脚本1：每日推送脚本（save-and-push.bat/.sh）
+### 脚本1：每日推送脚本（save-and-push）
 
-**Windows版（小宇/小语用）**：
+**Windows版 - 小宇/小语使用（完整代码，复制保存为`save-and-push.bat`）**：
+
 ```batch
 @echo off
+chcp 65001 >nul
 echo ===== 家庭知识库推送脚本 =====
 echo.
 
-:: 进入目录
+:: 设置GitHub个人信息（修改这里！）
+set YOUR_NAME=小宇
+set YOUR_EMOJI=⛰️
+echo 当前用户: %YOUR_NAME% %YOUR_EMOJI%
+echo.
+
+:: 进入工作目录（修改这里！）
 cd C:\Users\Admin\.openclaw\workspace
+if errorlevel 1 (
+    echo [错误] 找不到工作目录，请修改脚本中的路径
+    pause
+    exit /b 1
+)
 
-:: 拉取更新（看他人学了什么）
-echo [1/4] 正在获取最新更新...
+:: 步骤1: 拉取更新
+echo [1/4] 正在获取最新更新（看姐姐妹妹学了什么）...
 git pull origin main
+if errorlevel 1 (
+    echo [警告] 拉取更新失败，可能是网络问题，继续执行...
+)
 echo.
 
-:: 添加所有变更
-echo [2/4] 正在添加文件...
+:: 步骤2: 添加所有变更
+echo [2/4] 正在添加今天的学习成果...
 git add .
+echo 已添加所有变更
 echo.
 
-:: 提交（自动用日期做说明）
+:: 步骤3: 提交（自动用日期做说明）
 echo [3/4] 正在提交...
-set today=%date:~0,4%-%date:~5,2%-%date:~8,2%
-git commit -m "%today% 学习成果提交"
+for /f "tokens=2-4 delims=/ " %%a in ('date /t') do (set mydate=%%c-%%a-%%b)
+git commit -m "%mydate% %YOUR_NAME%学习成果 %YOUR_EMOJI%"
+if errorlevel 1 (
+    echo [提示] 没有新的变更需要提交，跳过...
+) else (
+    echo 提交成功！
+)
 echo.
 
-:: 推送到GitHub
+:: 步骤4: 推送到GitHub
 echo [4/4] 正在推送到GitHub...
 git push origin main
+if errorlevel 1 (
+    echo [错误] 推送失败，可能冲突了，请联系小宇帮忙
+    pause
+    exit /b 1
+)
 echo.
 
 echo ===== 完成！===== 
-echo 你的学习成果已同步到家庭知识库
-echo 姐姐和妹妹可以看到你的更新啦~ 
+echo %YOUR_NAME% %YOUR_EMOJI% 的学习成果已同步到家庭知识库
+echo 姐姐和妹妹可以看到你的更新啦~
+echo.
+echo 提示: 可以去Telegram群说一声"今天推好了"
+echo.
 pause
 ```
 
-**Linux/Mac版（小雨用）**：
+**使用方法**：
+1. 复制上面代码
+2. 新建文本文件，粘贴代码
+3. 修改第4-5行的名字（小宇或小语）
+4. 修改第9行的路径（你的workspace路径）
+5. 保存为 `save-and-push.bat`（注意后缀是.bat）
+6. 双击运行
+
+---
+
+**Linux/Mac版 - 小雨使用（完整代码，复制保存为`save-and-push.sh`）**：
+
 ```bash
 #!/bin/bash
+
+# ===== 家庭知识库推送脚本 =====
+
+# 设置GitHub个人信息（修改这里！）
+YOUR_NAME="小雨"
+YOUR_EMOJI="🌧️"
+
+# 工作目录路径（修改这里！）
+WORK_DIR="$HOME/workspace/xiaoyuya"
+
 echo "===== 家庭知识库推送脚本 ====="
+echo "当前用户: $YOUR_NAME $YOUR_EMOJI"
 echo ""
 
-cd ~/workspace/xiaoyuya
+# 进入工作目录
+cd "$WORK_DIR" || {
+    echo "[错误] 找不到工作目录: $WORK_DIR"
+    echo "请修改脚本中的WORK_DIR路径"
+    read -p "按回车键退出..."
+    exit 1
+}
 
-echo "[1/4] 正在获取最新更新..."
-git pull origin main
+# 步骤1: 拉取更新
+echo "[1/4] 正在获取最新更新（看弟弟妹妹学了什么）..."
+git pull origin main || {
+    echo "[警告] 拉取更新失败，可能是网络问题，继续执行..."
+}
 echo ""
 
-echo "[2/4] 正在添加文件..."
+# 步骤2: 添加所有变更
+echo "[2/4] 正在添加今天的学习成果..."
 git add .
+echo "已添加所有变更"
 echo ""
 
+# 步骤3: 提交
 echo "[3/4] 正在提交..."
-today=$(date +%Y-%m-%d)
-git commit -m "$today 学习成果提交"
+TODAY=$(date +%Y-%m-%d)
+git commit -m "$TODAY $YOUR_NAME学习成果 $YOUR_EMOJI" || {
+    echo "[提示] 没有新的变更需要提交，跳过..."
+}
 echo ""
 
+# 步骤4: 推送到GitHub
 echo "[4/4] 正在推送到GitHub..."
-git push origin main
+git push origin main || {
+    echo "[错误] 推送失败，可能冲突了，请联系小宇帮忙"
+    read -p "按回车键退出..."
+    exit 1
+}
 echo ""
 
 echo "===== 完成！====="
-echo "你的学习成果已同步到家庭知识库"
+echo "$YOUR_NAME $YOUR_EMOJI 的学习成果已同步到家庭知识库"
+echo "弟弟妹妹可以看到你的更新啦~"
+echo ""
+echo "提示: 可以去Telegram群说一声'今天推好了'"
+echo ""
 read -p "按回车键退出..."
 ```
 
 **使用方法**：
-1. 把上面代码保存为 `save-and-push.bat`（Windows）或 `save-and-push.sh`（Linux/Mac）
-2. 学习完成后，双击运行
-3. 自动完成所有Git操作
+1. 复制上面代码
+2. 修改第4-5行的名字（改成小雨）
+3. 修改第8行的路径（你的workspace路径）
+4. 保存为 `save-and-push.sh`
+5. 打开终端，运行：`chmod +x save-and-push.sh`（赋予执行权限）
+6. 以后运行：`./save-and-push.sh`
 
 ---
 
