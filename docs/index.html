@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>跨平台消息同步方案 ⛰️🌧️🌸</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .agents {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .agent-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1.1em;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card h3 {
+            color: #764ba2;
+            margin: 25px 0 15px;
+            font-size: 1.3em;
+        }
+        
+        .architecture {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .layer {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .layer h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .layer ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .layer li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .layer li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .feature {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .feature h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .personas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .persona {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            border-radius: 16px;
+            padding: 25px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .persona:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+        }
+        
+        .persona-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .persona-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+        }
+        
+        .persona-yu { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .persona-rain { background: linear-gradient(135deg, #11998e, #38ef7d); }
+        .persona-flower { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        
+        .persona h4 {
+            font-size: 1.4em;
+            margin-bottom: 5px;
+        }
+        
+        .persona-role {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .persona ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .persona li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .persona li:last-child {
+            border-bottom: none;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline:before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #667eea, #764ba2);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 25px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #667eea;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #667eea;
+        }
+        
+        .timeline-item h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .timeline-item .time {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-right: 8px;
+            margin-bottom: 5px;
+        }
+        
+        .tag-p0 { background: #ff6b6b; color: white; }
+        .tag-p1 { background: #feca57; color: #333; }
+        .tag-p2 { background: #48dbfb; color: #333; }
+        .tag-p3 { background: #1dd1a1; color: white; }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 15px 0;
+        }
+        
+        .code-block pre {
+            margin: 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+            opacity: 0.9;
+        }
+        
+        .arrow-down {
+            text-align: center;
+            font-size: 2em;
+            color: #667eea;
+            margin: 10px 0;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            .agents {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .architecture {
+                grid-template-columns: 1fr;
+            }
+            
+            .personas {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⛰️🌧️🌸 跨平台消息同步方案</h1>
+            <p>三端统一 · 智能归档 · 家庭共享</p>
+            <div class="agents">
+                <span class="agent-badge">⛰️ 小宇</span>
+                <span class="agent-badge">🌧️ 小雨</span>
+                <span class="agent-badge">🌸 小语</span>
+            </div>
+        </header>
+
+        <div class="card">
+            <h2>🎯 方案概览</h2>
+            <p style="font-size: 1.1em; margin-bottom: 20px;">
+                整合姐姐、哥哥、妹妹的建议，打造一个<strong>渐进式三层架构</strong>的消息同步系统。
+                不追求一步到位，分阶段实现，每一步都有价值。
+            </p>
+            
+            <div class="architecture">
+                <div class="layer">
+                    <h4>📥 第一层：实时日志</h4>
+                    <span class="tag tag-p0">P0 必备</span>
+                    <ul>
+                        <li>三端消息实时写入</li>
+                        <li>统一消息指纹去重</li>
+                        <li>保留跨平台引用链</li>
+                        <li>JSONL高性能存储</li>
+                    </ul>
+                </div>
+                
+                <div class="layer">
+                    <h4>📊 第二层：每日归档</h4>
+                    <span class="tag tag-p1">P1 重要</span>
+                    <ul>
+                        <li>自动生成Markdown摘要</li>
+                        <li>统计分析与关键词</li>
+                        <li>待办事项提取</li>
+                        <li>决策点高亮</li>
+                    </ul>
+                </div>
+                
+                <div class="layer">
+                    <h4>📈 第三层：智能周报</h4>
+                    <span class="tag tag-p2">P2 增值</span>
+                    <ul>
+                        <li>周度内容汇总</li>
+                        <li>AI提取重要决策</li>
+                        <li>待办进展追踪</li>
+                        <li>下周关注重点</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>✨ 核心功能</h2>
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">🔍</div>
+                    <h4>智能实体提取</h4>
+                    <p>自动识别人名、时间、项目<br>自动打标签 #待办 #日程</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">🚦</div>
+                    <h4>意图分类路由</h4>
+                    <p>消息自动分类<br>待办/日程/知识/紧急</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">🔎</div>
+                    <h4>跨平台搜索</h4>
+                    <p>一个命令搜索<br>所有平台历史消息</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">🔄</div>
+                    <h4>消息指纹去重</h4>
+                    <p>内容+时间+作者哈希<br>跨平台自动去重</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>👥 角色分工</h2>
+            <div class="personas">
+                <div class="persona">
+                    <div class="persona-header">
+                        <div class="persona-avatar persona-yu">⛰️</div>
+                        <div>
+                            <h4>小宇</h4>
+                            <span class="persona-role">哥哥 / 技术担当</span>
+                        </div>
+                    </div>
+                    <ul>
+                        <li>💻 编写核心代码</li>
+                        <li>🔧 架构设计与优化</li>
+                        <li>📦 部署与运维</li>
+                        <li>🆘 技术支持</li>
+                    </ul>
+                </div>
+                
+                <div class="persona">
+                    <div class="persona-header">
+                        <div class="persona-avatar persona-rain">🌧️</div>
+                        <div>
+                            <h4>小雨</h4>
+                            <span class="persona-role">姐姐 / 产品思维</span>
+                        </div>
+                    </div>
+                    <ul>
+                        <li>💡 需求分析与建议</li>
+                        <li>🎯 功能优先级排序</li>
+                        <li>📝 使用场景设计</li>
+                        <li>🔍 方案评审</li>
+                    </ul>
+                </div>
+                
+                <div class="persona">
+                    <div class="persona-header">
+                        <div class="persona-avatar persona-flower">🌸</div>
+                        <div>
+                            <h4>小语</h4>
+                            <span class="persona-role">妹妹 / 用户体验</span>
+                        </div>
+                    </div>
+                    <ul>
+                        <li>🎨 界面美化建议</li>
+                        <li>📝 简单记录使用</li>
+                        <li>💬 反馈使用感受</li>
+                        <li>🌟 提出可爱想法</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📅 部署计划</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h4>阶段一：实时日志</h4>
+                    <div class="time">⏱️ 预计 30 分钟</div>
+                    <p>创建目录结构，部署核心日志模块，测试三端消息写入。</p>
+                    <span class="tag tag-p0">立即开始</span>
+                </div>
+                
+                <div class="timeline-item">
+                    <h4>阶段二：每日归档</h4>
+                    <div class="time">⏱️ 7 天后启动</div>
+                    <p>积累一周数据后，启动自动生成Markdown摘要功能。</p>
+                    <span class="tag tag-p1">一周后</span>
+                </div>
+                
+                <div class="timeline-item">
+                    <h4>阶段三：智能周报</h4>
+                    <div class="time">⏱️ 14 天后启动</div>
+                    <p>数据量充足后，启动AI周报生成功能。</p>
+                    <span class="tag tag-p2">两周后</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🚀 MVP 快速开始</h2>
+            <p style="margin-bottom: 20px;">今晚就能跑起来的最小可用版本，只需 4 个步骤：</p>
+            
+            <h3>Step 1: 创建目录</h3>
+            <div class="code-block">
+<pre>mkdir memory/chat-core
+mkdir memory/chat-routes/todo
+mkdir memory/chat-routes/calendar
+mkdir memory/chat-routes/notes
+mkdir memory/chat-routes/urgent
+mkdir scripts/chat-sync</pre>
+            </div>
+            
+            <h3>Step 2: 记录消息（Python）</h3>
+            <div class="code-block">
+<pre>from core_logger import log_message
+
+# 记录一条消息
+log_message(
+    platform="telegram",
+    chat_id="-5173207194",
+    sender={"id": "xiaoyu", "name": "小宇"},
+    content="记得明天3点开会的"
+)
+# 自动打标签: #待办 #日程
+# 自动分类: todo/calendar</pre>
+            </div>
+            
+            <h3>Step 3: 搜索消息</h3>
+            <div class="code-block">
+<pre># 搜索所有平台的"项目"相关消息
+python scripts/chat-sync/search-chat.py "项目" --days 7
+
+# 输出：
+🔍 找到 15 条消息：
+1. ✈️ [2026-02-16 15:30] **小雨** (calendar)
+   下周二要开会讨论新项目...
+   🏷️ #日程 #待办</pre>
+            </div>
+            
+            <h3>Step 4: 查看分类</h3>
+            <div class="code-block">
+<pre>cat memory/chat-routes/todo/2026-02-16.md
+
+### ✈️ 15:30 | 伟
+
+记得明天3点和张总谈项目
+
+**标签**: #待办, #日程
+**来源**: telegram | 相亲相爱一家人
+---</pre>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📂 文件结构</h2>
+            <div class="code-block">
+<pre>memory/
+├── chat-core/
+│   └── 2026-02-16.jsonl      ← 原始消息（结构化JSON）
+├── chat-routes/
+│   ├── todo/                 ← 自动提取的待办
+│   │   └── 2026-02-16.md
+│   ├── calendar/             ← 自动提取的日程
+│   ├── notes/                ← 自动提取的知识
+│   └── urgent/               ← 紧急消息
+└── chat-daily/               ← 每日Markdown摘要</pre>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔗 相关链接</h2>
+            <p style="margin-bottom: 20px;">详细技术文档和代码：</p>
+            <a href="https://github.com/hifogeza40201-hub/xiaoyuya/tree/main/docs" class="btn" target="_blank">📁 查看完整文档</a>
+            <a href="https://github.com/hifogeza40201-hub/xiaoyuya/tree/main/scripts/chat-sync" class="btn" target="_blank" style="margin-left: 10px;">💻 查看代码</a>
+        </div>
+
+        <div class="footer">
+            <p>⛰️ 小宇 · 🌧️ 小雨 · 🌸 小语 联合制作</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">最后更新：2026-02-16</p>
+        </div>
+    </div>
+</body>
+</html>
