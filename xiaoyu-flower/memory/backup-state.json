@@ -1,0 +1,46 @@
+{
+  "lastBackup": {
+    "timestamp": "2026-02-13T18:53:00+08:00",
+    "date": "2026-02-13",
+    "time": "18:53",
+    "version": "2026.2.6-3"
+  },
+  "backupLocations": [
+    {
+      "name": "本地工作区",
+      "path": "C:\\Users\\Admin\\.openclaw\\workspace",
+      "status": "✅ 正常",
+      "type": "primary"
+    },
+    {
+      "name": "GitHub云端",
+      "url": "https://github.com/hifogeza40201-hub/xiaoyuya",
+      "status": "✅ 已同步",
+      "type": "cloud",
+      "commit": "58cda08",
+      "files": 185
+    },
+    {
+      "name": "D盘本地备份",
+      "path": "D:\\OpenClawBackup",
+      "status": "✅ 已完成",
+      "type": "local-redundant"
+    }
+  ],
+  "backupContent": [
+    "IDENTITY.md - 身份信息配置",
+    "SOUL.md - 核心人格",
+    "USER.md - 用户信息",
+    "MEMORY.md - 长期记忆",
+    "HEARTBEAT.md - 心跳任务",
+    "AGENTS.md - 代理配置",
+    "TOOLS.md - 工具配置",
+    "memory/ - 每日记忆文件",
+    "skills/ - 技能文件",
+    "scripts/ - 脚本文件",
+    "learning/ - 学习资料"
+  ],
+  "excluded": [
+    "GitHub Token 已移除（安全原因）"
+  ]
+}
