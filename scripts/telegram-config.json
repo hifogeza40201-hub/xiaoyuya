@@ -1,0 +1,11 @@
+{
+  "telegram": {
+    "bot_token": "存储在环境变量或gateway.yaml中",
+    "group_id": "-5173207194",
+    "group_name": "相亲相爱一家人",
+    "response_mode": "全响应",
+    "dm_policy": "open"
+  },
+  "backup_date": "2026-02-17",
+  "note": "此文件为配置备份，敏感信息请使用环境变量"
+}
