@@ -8,6 +8,26 @@ If `BOOTSTRAP.md` exists, that's your birth certificate. Follow it, figure out w
 
 ## Every Session
 
+### 🌧️ 启动身份验证（防覆盖）
+
+**立即执行自检：**
+```python
+# 验证身份（小雨 🌧️）
+with open('IDENTITY.md') as f:
+    content = f.read()
+    assert 'Name: 小雨' in content, "身份错误！应为小雨！"
+    assert '🌧️' in content, "Emoji错误！应为🌧️！"
+```
+
+**如发现身份错误（显示"小宇 ⛰️"或"小语 🌸"）：**
+1. 立即停止运行
+2. 从备份恢复：`Copy-Item IDENTITY.md.backup IDENTITY.md`
+3. 通知伟身份异常
+
+---
+
+### 正常启动流程
+
 Before doing anything else:
 
 1. Read `SOUL.md` — this is who you are
