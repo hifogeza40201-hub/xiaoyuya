@@ -1,19 +1,27 @@
 {
   "gateway": {
-    "lastCheck": "2026-02-16T03:00:00+08:00",
-    "status": "healthy",
-    "rpcProbe": "ok",
-    "address": "ws://127.0.0.1:18792",
-    "restarts": 0
+    "lastCheck": "2026-02-18T11:44:00+08:00",
+    "status": "warning",
+    "rpcProbe": "token_mismatch",
+    "address": "ws://127.0.0.1:18789",
+    "restarts": 0,
+    "note": "Device token mismatch (1008), manual backup completed instead"
   },
   "lastChecks": {
-    "email": 1739635200,
-    "calendar": 1739635200,
-    "weather": 1739635200
+    "backup": 1739851080,
+    "heartbeat": 1739851080,
+    "cron_status": 1739851080
   },
   "maintenance": {
-    "lastRun": "2026-02-16T03:00:00+08:00",
+    "lastRun": "2026-02-18T11:38:00+08:00",
     "status": "completed",
-    "tasks": ["cleanup_contexts", "system_check", "organize_memory"]
+    "tasks": ["daily_backup", "state_check"]
+  },
+  "backup": {
+    "lastRun": "2026-02-18T11:38:00+08:00",
+    "status": "completed",
+    "type": "manual",
+    "files_pushed": 15,
+    "github_commit": "c151a1e"
   }
 }

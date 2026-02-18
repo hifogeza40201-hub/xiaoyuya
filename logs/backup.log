@@ -54,3 +54,9 @@
 [2026-02-18 11:38:35] [INFO] Cleaning backups older than 30 days...
 [2026-02-18 11:38:35] [INFO] Cleanup completed, deleted 0 old backups
 [2026-02-18 11:38:35] [INFO] Pushing to GitHub...
+[2026-02-18 11:38:35] [INFO] GitHub push completed
+[2026-02-18 11:38:35] [INFO] ==========================================
+[2026-02-18 11:38:35] [INFO] Daily backup task completed
+[2026-02-18 11:38:35] [INFO] Critical backup: D:\critical-backup
+[2026-02-18 11:38:35] [INFO] Daily backup: D:\\backup-2026-02-18
+[2026-02-18 11:38:35] [INFO] ==========================================

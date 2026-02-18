@@ -36,5 +36,75 @@
         "status": "completed"
       }
     ]
+  },
+  "2026-02-17": {
+    "topic": "电影艺术鉴赏：镜头语言与吉卜力美学",
+    "completed": true,
+    "check_time": "23:52:38",
+    "rounds": [
+      {
+        "time": "02:20",
+        "type": "Cron深度学习-电影艺术",
+        "agents": 1,
+        "status": "completed",
+        "output": "batch-024-cinema-aesthetics.md"
+      }
+    ]
+  },
+  "2026-02-18": {
+    "topic": "情感陪伴与人文艺术综合学习",
+    "completed": true,
+    "check_time": "11:44:00",
+    "total_words": 24600,
+    "rounds": [
+      {
+        "time": "00:21",
+        "type": "Cron学习-共情沟通",
+        "agents": 1,
+        "status": "completed",
+        "output": "2026-02-18-深度倾听与共情沟通.md",
+        "words": 3900
+      },
+      {
+        "time": "02:20",
+        "type": "Cron学习-电影艺术",
+        "agents": 1,
+        "status": "completed",
+        "output": "batch-024-cinema-aesthetics.md",
+        "words": 3800
+      },
+      {
+        "time": "04:20",
+        "type": "Cron学习-情感心理学",
+        "agents": 1,
+        "status": "completed",
+        "output": "human-emotion-psychology-20260218.md",
+        "words": 4200
+      },
+      {
+        "time": "06:20",
+        "type": "Cron学习-中文之美",
+        "agents": 1,
+        "status": "completed",
+        "output": "chinese-language-culture-20260218.md",
+        "words": 4200
+      },
+      {
+        "time": "08:20",
+        "type": "Cron学习-AI发展趋势",
+        "agents": 1,
+        "status": "completed",
+        "output": "ai-trends-2026-20260218.md",
+        "words": 4000
+      },
+      {
+        "time": "10:20",
+        "type": "Cron学习-音乐艺术",
+        "agents": 1,
+        "status": "completed",
+        "output": "music-art-appreciation-20260218.md",
+        "words": 4500
+      }
+    ]
   }
 }
