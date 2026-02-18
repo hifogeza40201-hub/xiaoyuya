@@ -52,10 +52,11 @@
     ]
   },
   "2026-02-18": {
-    "topic": "情感陪伴与人文艺术综合学习",
+    "topic": "情感陪伴、人文艺术、餐饮行业综合学习",
     "completed": true,
-    "check_time": "11:44:00",
-    "total_words": 24600,
+    "check_time": "13:24:00",
+    "total_notes": 14,
+    "total_size_kb": 198.6,
     "rounds": [
       {
         "time": "00:21",
@@ -104,6 +105,25 @@
         "status": "completed",
         "output": "music-art-appreciation-20260218.md",
         "words": 4500
+      },
+      {
+        "time": "11:30",
+        "type": "集群学习-餐饮行业",
+        "agents": 10,
+        "status": "completed",
+        "notes": [
+          "catering-industry-overview-20260218.md",
+          "catering-consumer-psychology-20260218.md",
+          "catering-chain-growth-20260218.md",
+          "catering-supply-chain-20260218.md",
+          "catering-startup-guide-20260218.md",
+          "catering-industry-digital-20260218.md",
+          "new-tea-coffee-20260218.md",
+          "smart-restaurant-ai-20260218.md",
+          "xiaoyu-catering-reflection-20260218.md",
+          "quality-check-report-20260218.md"
+        ],
+        "total_kb": 145.5
       }
     ]
   }
