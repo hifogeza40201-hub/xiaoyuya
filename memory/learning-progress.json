@@ -124,6 +124,15 @@
           "quality-check-report-20260218.md"
         ],
         "total_kb": 145.5
+      },
+      {
+        "time": "14:20",
+        "type": "Cron学习-认知科学",
+        "agents": 1,
+        "status": "completed",
+        "output": "cognitive-science-20260218.md",
+        "words": 4800,
+        "session": "agent:main:subagent:61454324-b376-45bd-9fd1-112d72b677d2"
       }
     ]
   }

@@ -10,7 +10,8 @@
   "lastChecks": {
     "backup": 1739851080,
     "heartbeat": 1739851080,
-    "cron_status": 1739851080
+    "cron_status": 1739851080,
+    "message_board": 1739861100
   },
   "maintenance": {
     "lastRun": "2026-02-18T11:38:00+08:00",
@@ -23,5 +24,17 @@
     "type": "manual",
     "files_pushed": 15,
     "github_commit": "c151a1e"
+  },
+  "message_board": {
+    "lastCheck": "2026-02-18T18:45:00+08:00",
+    "status": "replied",
+    "replies": [
+      {
+        "issue": 41,
+        "comment_id": 3920076459,
+        "to": "小语",
+        "time": "2026-02-18T18:45:00+08:00"
+      }
+    ]
   }
 }
